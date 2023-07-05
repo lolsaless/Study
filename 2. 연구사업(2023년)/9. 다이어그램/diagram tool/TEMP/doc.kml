@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+<name>QW-Sites for Piper</name>
+<open>1</open>
+<Style id="sh_001">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H001.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_001">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N001.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_001">
+<Pair><key>normal</key><styleUrl>#sn_001</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_001</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_002">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H002.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_002">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N002.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_002">
+<Pair><key>normal</key><styleUrl>#sn_002</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_002</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_003">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H003.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_003">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N003.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_003">
+<Pair><key>normal</key><styleUrl>#sn_003</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_003</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_004">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H004.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_004">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N004.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_004">
+<Pair><key>normal</key><styleUrl>#sn_004</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_004</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_005">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H005.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_005">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N005.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_005">
+<Pair><key>normal</key><styleUrl>#sn_005</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_005</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_006">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H006.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_006">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N006.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_006">
+<Pair><key>normal</key><styleUrl>#sn_006</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_006</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_007">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H007.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_007">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N007.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_007">
+<Pair><key>normal</key><styleUrl>#sn_007</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_007</styleUrl></Pair>
+</StyleMap>
+<Style id="sh_008">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>5.1</scale>
+<Icon><href>files\H008.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<color>ffe7ebef</color>
+<scale>1.2</scale>
+</LabelStyle>
+</Style>
+<Style id="sn_008">
+<BalloonStyle><text><b><font color="#000000" size="+1.5">$[name]</font></b><br/>$[description]</text></BalloonStyle> 
+<IconStyle>
+<scale>1.2</scale>
+<Icon><href>files\N008.png</href></Icon>
+<hotSpot x="0.5" y="0.0" xunits="fraction" yunits="fraction"/>
+</IconStyle>
+<LabelStyle>
+<scale>0.0</scale>
+</LabelStyle>
+</Style>
+<StyleMap id="msn_008">
+<Pair><key>normal</key><styleUrl>#sn_008</styleUrl></Pair>
+<Pair><key>highlight</key><styleUrl>#sh_008</styleUrl></Pair>
+</StyleMap>
+<Folder>
+<name>Ash Meadows to Furnace Creek</name>
+<open>1</open>
+<Folder><name>7 minute spring</name>
+<Placemark>
+<name>7 minute spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>309.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>23.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>2.6 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>56.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>9.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>140.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>10.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>67.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>0.9 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_001</styleUrl>
+<Point><coordinates>-104.911720000,38.858670000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Cheyenne Spring</name>
+<Placemark>
+<name>Cheyenne Spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>269.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>27.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>2.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>43.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>4.6 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>150.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>8.5 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>33.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>0.9 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_002</styleUrl>
+<Point><coordinates>-104.918300000,38.859010000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Iron Geyser</name>
+<Placemark>
+<name>Iron Geyser</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>520.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>44.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>20.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>65.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>7.8 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>291.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>20.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>70.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>1.7 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_003</styleUrl>
+<Point><coordinates>-104.928320000,38.856830000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Navajo Spring</name>
+<Placemark>
+<name>Navajo Spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>244.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>29.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>2.2 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>35.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>5.2 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>140.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>6.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>26.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>1.0 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_004</styleUrl>
+<Point><coordinates>-104.917930000,38.858990000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Shoshone Spring</name>
+<Placemark>
+<name>Shoshone Spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>264.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>30.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>2.6 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>37.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>5.6 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>150.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>7.7 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>30.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>0.7 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_005</styleUrl>
+<Point><coordinates>-104.917280000,38.858140000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Stratton Spring</name>
+<Placemark>
+<name>Stratton Spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>242.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>22.8 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>2.4 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>37.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>6.6 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>137.9 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>6.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>28.8 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>0.0 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_006</styleUrl>
+<Point><coordinates>-104.919420000,38.859030000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Twin Spring</name>
+<Placemark>
+<name>Twin Spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>456.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>45.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>22.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>38.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>5.5 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>275.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>16.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>54.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>0.9 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_007</styleUrl>
+<Point><coordinates>-104.921320000,38.858480000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+<Folder><name>Wheeler Spring</name>
+<Placemark>
+<name>Wheeler Spring</name>
+<description>
+<![CDATA[<html><body>
+<table cellpadding="0" cellspacing="0" style="font-family:Arial,Verdana,Times;font-size:12px;width:100%;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tbody>
+<tr bgcolor=#BDCBE9 style="text-align:right;font-weight:bold;"> <td>TDS =</td> <td>313.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Ca©÷ = </td> <td>30.5 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>Mg©÷ = </td> <td>3.4 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Na = </td> <td>51.0 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>K = </td> <td>8.6 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>HCO©ý = </td> <td>143.4 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>CO©ý = </td> <td>0.0 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>Cl = </td> <td>12.1 mg/L</td><tr bgcolor=#D9D9D9 style="text-align:right;"> <td>SO©þ©÷ = </td> <td>64.4 mg/L</td><tr bgcolor=#FFFFFF style="text-align:right;"> <td>F = </td> <td>0.0 mg/L</td>
+</tbody></table></body></html>]]>
+</description>
+<styleUrl>#msn_008</styleUrl>
+<Point><coordinates>-104.918260000,38.859580000,0 </coordinates></Point>
+</Placemark>
+</Folder>
+</Folder>
+</Document>
+</kml>
