@@ -1,0 +1,16 @@
+
+# R Code for Plotting "Transformed Log Ca values by part"
+
+## Importing Libraries
+library(readxl)
+library(ggplot2)
+
+## Reading Data
+df <- read_excel("ca_data_transformed.xlsx")
+
+## Plotting
+ggplot(df, aes(x=row_number(), y=Transformed_Log_Ca, color=part)) +
+  geom_point() +
+  geom_hline(yintercept=0, linetype="dashed", color = "red") +
+  labs(title="Transformed Log Ca Values by Part", x="Index", y="Transformed_Log_Ca") +
+  theme_minimal()

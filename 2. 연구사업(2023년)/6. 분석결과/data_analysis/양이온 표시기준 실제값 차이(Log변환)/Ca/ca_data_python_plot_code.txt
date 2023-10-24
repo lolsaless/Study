@@ -1,0 +1,25 @@
+
+# Python Code for Plotting "Transformed Log Ca values by part"
+
+## Importing Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+## Reading Data
+df = pd.read_excel("ca_data_transformed.xlsx")
+
+## Plotting
+unique_parts = df['part'].unique()
+plt.figure(figsize=(10, 6))
+
+for part in unique_parts:
+    subset = df[df['part'] == part]
+    plt.scatter(subset.index, subset['Transformed_Log_Ca'], label=f'Transformed_Log_Ca ({part})')
+
+plt.axhline(0, color='red', linestyle='--', label='Zero Line')
+plt.xlabel('Index')
+plt.ylabel('Transformed_Log_Ca')
+plt.title('Transformed Log Ca Values by Part')
+plt.legend()
+plt.grid(True)
+plt.show()

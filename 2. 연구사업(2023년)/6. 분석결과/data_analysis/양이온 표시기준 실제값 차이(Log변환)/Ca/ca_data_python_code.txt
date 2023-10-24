@@ -1,0 +1,36 @@
+
+# Python Code for Data Transformation and Plotting
+
+## Importing Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
+import seaborn as sns
+
+## Reading Data
+df = pd.read_excel("ca_data.xlsx")
+
+## Data Transformation
+# Transforming Ca
+df['Transformed_Ca'] = df['Ca'] - df['Ca_max']
+
+# Log Transformation
+df['Log_Ca_max'] = np.log(df['Ca_max'] + 1)
+df['Log_Ca'] = np.log(df['Ca'] + 1)
+
+# Log Transformed Ca
+df['Transformed_Log_Ca'] = df['Log_Ca'] - df['Log_Ca_max']
+
+## Plotting
+# Histogram
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Transformed_Ca'], kde=True)
+plt.title('Histogram of Transformed_Ca')
+plt.show()
+
+# QQ-Plot
+plt.figure(figsize=(10, 6))
+stats.probplot(df['Transformed_Ca'], dist="norm", plot=plt)
+plt.title('QQ-Plot of Transformed_Ca')
+plt.show()
