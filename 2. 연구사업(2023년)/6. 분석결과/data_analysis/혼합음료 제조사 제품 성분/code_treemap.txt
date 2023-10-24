@@ -1,0 +1,34 @@
+import pandas as pd
+import squarify
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 데이터 불러오기
+df = pd.read_excel("data_component.xlsx")
+
+# 그룹별 물질의 발생 횟수 계산
+group_text_counts = df.groupby('Group')['Text'].value_counts()
+
+# 데이터 준비
+grouped_data = group_text_counts.reset_index(name='Count')
+
+# 'water' 그룹 제외
+grouped_data = grouped_data[grouped_data['Group'] != 'Water']
+
+# 데이터 정렬 및 상위 15개 선택
+grouped_data.sort_values('Count', ascending=False, inplace=True)
+top_data = grouped_data.head(15)
+
+# 컬러맵 설정
+cmap = plt.cm.viridis
+colors = cmap(np.linspace(0, 1, len(top_data)))
+
+# 트리맵 플로팅
+plt.figure(figsize=(15, 10))
+squarify.plot(sizes=top_data['Count'],
+              label=top_data['Group'] + "\n" + top_data['Text'],
+              alpha=0.6,
+              color=colors)
+plt.title("Treemap of Top 15 Grouped Data without 'water' Group with Viridis Color Map")
+plt.axis("off")
+plt.show()
