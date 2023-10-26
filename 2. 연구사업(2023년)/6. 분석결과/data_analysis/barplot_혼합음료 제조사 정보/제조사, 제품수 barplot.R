@@ -1,8 +1,30 @@
 library(ggplot2)
 library(readxl)
+# 데이터를 Manufacturer에 따라 정렬
+data_sorted <- data[order(-data$Manufacturer), ]
 
-# C:
-setwd("C:/Git/Study/2. 연구사업(2023년)/6. 분석결과/data_analysis/혼합음료 제조사 정보")
+# ggplot2로 그래프 그리기
+ggplot(data_sorted, aes(x = reorder(region, -Manufacturer))) + 
+    geom_bar(aes(y = Manufacturer), stat = "identity", position = "dodge", fill = "blue") + 
+    geom_density(aes(y = Product * 0.1, fill = "Product"), alpha = 0.5) + 
+    scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Product")) + 
+    labs(title = "Manufacturer and Product by Region", y = "Manufacturer", fill = "Metric") + 
+    theme_minimal()
+
+ggplot(data, aes(x = region)) + 
+    geom_bar(aes(y = Manufacturer), stat = "identity", position = "dodge", fill = "blue") + 
+    geom_density(aes(y = Product * 0.1, fill = "Product"), alpha = 0.5) + 
+    scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Product")) + 
+    labs(title = "Manufacturer and Product by Region", y = "Manufacturer", fill = "Metric") + 
+    theme_minimal()
+ggplot(data, aes(x = region)) + 
+    geom_bar(aes(y = Manufacturer), stat = "identity", position = "dodge", fill = "blue") + 
+    geom_line(aes(y = Product * 0.1, group = 1), color = "red", size = 1) +
+    geom_point(aes(y = Product * 0.1), color = "red", size = 3) +
+    scale_y_continuous(sec.axis = sec_axis(~.*10, name = "Product")) + 
+    labs(title = "Manufacturer and Product by Region", y = "Manufacturer") + 
+    theme_minimal()
+
 
 # barplot
 data <- read_xlsx("data_barplot.xlsx")
@@ -51,4 +73,7 @@ p <- ggplot(data, aes(x=region, y=Manufacturer, size=Product, label=paste("n:", 
           legend.position="bottom")
 
 print(p)
+
+
+
 

@@ -33,16 +33,16 @@ df <- df %>% drop_na(Transformed_Log_Ca)
 dens_obj <- density(df$Transformed_Log_Ca)
 
 # `Transformed_Log_Ca` 값을 기준으로 범주를 만드는 예시 코드
-df$density_cat <- cut(df$Transformed_Log_Ca, 
+df$Level <- cut(df$Transformed_Log_Ca, 
                       breaks = c(-Inf, -1.5, -1, -0.5, 0.5, 1, Inf), 
                       labels = c("Very High", "High", "Medium", "Low", "Medium", "High"))
 
 # ggplot 코드
-p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Ca, color=density_cat, shape=Sample)) +
+ggplot(df, aes(x=row_num, y=Transformed_Log_Ca, color=Level, shape=Sample)) +
     geom_point() +
     scale_shape_manual(values = c(2, 1)) +
     geom_hline(yintercept=0, linetype="dashed", color = "red") +
     geom_hline(yintercept=c(0.5, -0.5), linetype="dashed", color = "#4682B4") +
-    labs(title="Transformed Log  Values by Part with Density", x="Index", y="Transformed_Log_Ca") +
+    labs(title="Transformed Log Ca Values", x="sample", y="Log Ca") +
     theme_minimal() +
     scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#D2691E", "Very High" = "#DC143C"))

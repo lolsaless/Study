@@ -98,12 +98,12 @@ p + geom_text_repel(
 )
 
 # `Transformed_Log_Na` 값을 기준으로 범주를 만드는 예시 코드
-df$density_cat <- cut(df$Transformed_Log_Na, 
+df$Level <- cut(df$Transformed_Log_Na, 
                       breaks = c(-Inf, -1.5, -1, -0.5, 0.5, 1, Inf), 
                       labels = c("Very High", "High", "Medium", "Low", "Medium", "High"))
 
 # ggplot 코드
-p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Na, color=density_cat, shape=Sample)) +
+p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Na, color=Level, shape=Sample)) +
     geom_point() +
     scale_shape_manual(values = c(2, 1)) +
     geom_hline(yintercept=0, linetype="dashed", color = "red") +
@@ -125,12 +125,12 @@ p + geom_text_repel(
 
 # ggrepel: 5 unlabeled data points (too many overlaps). Consider increasing max.overlaps
 # ggplot 코드
-p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Na, color=density_cat, shape=Sample)) +
+p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Na, color=Level, shape=Sample)) +
     geom_point() +
     scale_shape_manual(values = c(2, 1)) +
     geom_hline(yintercept=0, linetype="dashed", color = "red") +
     geom_hline(yintercept=c(0.5, -0.5), linetype="dashed", color = "#4682B4") +
-    labs(title="Transformed Log  Values by Part with Density", x="Index", y="Transformed_Log_Na") +
+    labs(title="Transformed Log Na Values", x="sample", y="Log Na") +
     theme_minimal() +
     scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#D2691E", "Very High" = "#DC143C"))
 
