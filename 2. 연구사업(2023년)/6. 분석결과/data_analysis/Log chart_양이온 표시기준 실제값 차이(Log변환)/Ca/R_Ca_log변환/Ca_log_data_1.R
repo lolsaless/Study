@@ -6,7 +6,7 @@ library(ggplot2)
 library(car)
 library(tidyverse)
 library(ggrepel)
-library(scales)
+
 setwd("D:/github/R_coding/[사업] 2023_혼합음료/4. 양이온 표시기준 실제값 차이(Log변환)/Ca")
 
 ## Reading Data
@@ -17,8 +17,8 @@ df <- read_excel("ca_data.xlsx")
 df$Transformed_Ca <- df$Ca - df$Ca_max
 
 # Log Transformation
-df$Log_Ca_max <- log10(df$Ca_max)
-df$Log_Ca <- log10(df$Ca)
+df$Log_Ca_max <- log(df$Ca_max + 1)
+df$Log_Ca <- log(df$Ca + 1)
 
 # Log Transformed Ca
 df$Transformed_Log_Ca <- df$Log_Ca - df$Log_Ca_max
@@ -62,7 +62,7 @@ df$density <- interp_dens
 ## Adding row numbers
 df <- df %>% mutate(row_num = row_number())
 
-## density plot
+## ChatGPT
 ggplot(df, aes(x=row_num, y=Transformed_Log_Ca, color=density, shape=Sample)) +
     geom_point() +
     scale_shape_manual(values = c(2, 1)) +
@@ -98,25 +98,23 @@ p + geom_text_repel(
 )
 
 # `Transformed_Log_Ca` 값을 기준으로 범주를 만드는 예시 코드
-df$Level <- cut(df$Transformed_Log_Ca, 
+df$density_cat <- cut(df$Transformed_Log_Ca, 
                       breaks = c(-Inf, -1.5, -1, -0.5, 0.5, 1, Inf), 
                       labels = c("Very High", "High", "Medium", "Low", "Medium", "High"))
 
 # ggplot 코드
-p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Ca, color=Level, shape=Sample)) +
-    geom_point(size = 3) +
-    scale_shape_manual(values = c(21, 23)) +
+p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Ca, color=density_cat, shape=Sample)) +
+    geom_point() +
+    scale_shape_manual(values = c(2, 1)) +
     geom_hline(yintercept=0, linetype="dashed", color = "red") +
-    geom_hline(yintercept=c(0.3, -0.3), linetype="dashed", color = "#4682B4", size = 0.5) +
-    geom_hline(yintercept=c(0.6, -0.6), linetype="dashed", color = "#4682B4", size = 1) +
-    geom_hline(yintercept=c(0.9, -0.9), linetype="dashed", color = "#4682B4", size = 1.5) +
-    labs(title="Transformed Log Ca Values", x="Index", y="Transformed Log Ca") +
+    geom_hline(yintercept=c(0.5, -0.5), linetype="dashed", color = "#4682B4") +
+    labs(title="Transformed Log  Values by Part with Density", x="Index", y="Transformed_Log_Ca") +
     theme_minimal() +
     scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#D2691E", "Very High" = "#DC143C"))
 
 ## 라벨 추가하기
 p + geom_text_repel(
-    data = subset(df, Transformed_Log_Ca >= 0.5 | Transformed_Log_Ca <= -0.5),
+    data = subset(df, Transformed_Log_Ca >= 1 | Transformed_Log_Ca <= -1),
     aes(label = name_new, color = NULL, shape = NULL),
     box.padding = 0.5,
     point.padding = 0.5,
@@ -124,40 +122,3 @@ p + geom_text_repel(
     segment.color = "black",
     min.segment.length = 0
 )
-
-
-#### 완성 코드 ####
-p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Ca, color=Level, fill=Level, shape=Sample)) +
-    geom_point(size = 5) +
-    scale_shape_manual(values = c(21, 24)) + # 내부가 채워질 수 있는 형태로 변경
-    geom_hline(yintercept=0, linetype="dashed", color = "red", size = 0.8) +
-    geom_hline(yintercept=c(0.7, -0.7), linetype="dashed", color = "#4682B4", size = 0.5) +
-    geom_hline(yintercept=c(1, -1), linetype="dashed", color = "#4682B4", size = 0.5) +
-    labs(title="Transformed Log 'Ca' Values", x="Index", y="Transformed Log 'Ca'") +
-    theme_minimal() +
-    theme(
-        axis.text.x = element_text(size = 15),
-        axis.text.y = element_text(size = 15),
-        plot.title = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20)
-    ) +
-    scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#8B0000", "Very High" = "#DC143C")) +
-    scale_fill_manual(values = c(
-        "Low" = alpha("#2E8B57", 0.6), 
-        "Medium" = alpha("#FF8C00", 0.6), 
-        "High" = alpha("#D2691E", 0.6), 
-        "Very High" = alpha("#DC143C", 0.6)
-    ))
-
-p <- p + geom_text_repel(
-    data = subset(df, Transformed_Log_Ca >= 0.5 | Transformed_Log_Ca <= -0.5),
-    aes(label = name_new, color = NULL, shape = NULL, fill = NULL), # fill = NULL 추가
-    box.padding = 0.5,
-    point.padding = 0.5,
-    show.legend = FALSE, 
-    segment.color = "black",
-    min.segment.length = 0
-)
-
-print(p)

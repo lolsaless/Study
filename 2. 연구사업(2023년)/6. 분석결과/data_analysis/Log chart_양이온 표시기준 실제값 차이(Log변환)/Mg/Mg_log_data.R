@@ -17,8 +17,8 @@ df <- read_excel("Mg_data.xlsx")
 df$Transformed_Mg <- df$Mg - df$Mg_max
 
 # Log Transformation
-df$Log_Mg_max <- log(df$Mg_max + 1)
-df$Log_Mg <- log(df$Mg + 1)
+df$Log_Mg_max <- log10(df$Mg_max + 1)
+df$Log_Mg <- log10(df$Mg + 1)
 
 # Log Transformed Mg
 df$Transformed_Log_Mg <- df$Log_Mg - df$Log_Mg_max
@@ -122,3 +122,39 @@ p + geom_text_repel(
     segment.color = "black",
     min.segment.length = 0
 )
+
+#### 완성 코드 ####
+p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Mg, color=Level, fill=Level, shape=Sample)) +
+    geom_point(size = 5) +
+    scale_shape_manual(values = c(21, 24)) + # 내부가 채워질 수 있는 형태로 변경
+    geom_hline(yintercept=0, linetype="dashed", color = "red", size = 0.8) +
+    geom_hline(yintercept=c(0.7, -0.7), linetype="dashed", color = "#4682B4", size = 0.5) +
+    geom_hline(yintercept=c(1, -1), linetype="dashed", color = "#4682B4", size = 0.5) +
+    labs(title="Transformed Log 'Mg' Values", x="Index", y="Transformed Log 'Mg'") +
+    theme_minimal() +
+    theme(
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)
+    ) +
+    scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#D2691E", "Very High" = "#DC143C")) +
+    scale_fill_manual(values = c(
+        "Low" = alpha("#2E8B57", 0.6), 
+        "Medium" = alpha("#FF8C00", 0.6), 
+        "High" = alpha("#D2691E", 0.6), 
+        "Very High" = alpha("#DC143C", 0.6)
+    ))
+
+p <- p + geom_text_repel(
+    data = subset(df, Transformed_Log_Mg >= 0.5 | Transformed_Log_Mg <= -0.5),
+    aes(label = name_new, color = NULL, shape = NULL, fill = NULL), # fill = NULL 추가
+    box.padding = 0.5,
+    point.padding = 0.5,
+    show.legend = FALSE, 
+    segment.color = "black",
+    min.segment.length = 0
+)
+
+print(p)

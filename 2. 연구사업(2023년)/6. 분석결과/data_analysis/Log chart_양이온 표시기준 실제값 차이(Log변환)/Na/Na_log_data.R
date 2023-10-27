@@ -17,8 +17,8 @@ df <- read_excel("Na_data.xlsx")
 df$Transformed_Na <- df$Na - df$Na_max
 
 # Log Transformation
-df$Log_Na_max <- log(df$Na_max + 1)
-df$Log_Na <- log(df$Na + 1)
+df$Log_Na_max <- log10(df$Na_max + 1)
+df$Log_Na <- log10(df$Na + 1)
 
 # Log Transformed Na
 df$Transformed_Log_Na <- df$Log_Na - df$Log_Na_max
@@ -146,3 +146,39 @@ p + geom_text_repel(
     max.overlaps = 100, # max.overlaps 값을 조절
     max.iter = 5000 # max.iter 값을 조절
 )
+
+#### 완성 코드 ####
+p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Na, color=Level, fill=Level, shape=Sample)) +
+    geom_point(size = 5) +
+    scale_shape_manual(values = c(21, 24)) + # 내부가 채워질 수 있는 형태로 변경
+    geom_hline(yintercept=0, linetype="dashed", color = "red", size = 0.8) +
+    geom_hline(yintercept=c(0.7, -0.7), linetype="dashed", color = "#4682B4", size = 0.5) +
+    geom_hline(yintercept=c(1, -1), linetype="dashed", color = "#4682B4", size = 0.5) +
+    labs(title="Transformed Log 'Na' Values", x="Index", y="Transformed Log 'Na'") +
+    theme_minimal() +
+    theme(
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15),
+        plot.title = element_text(size = 20),
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_text(size = 20)
+    ) +
+    scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#D2691E", "Very High" = "#DC143C")) +
+    scale_fill_manual(values = c(
+        "Low" = alpha("#2E8B57", 0.6), 
+        "Medium" = alpha("#FF8C00", 0.6), 
+        "High" = alpha("#D2691E", 0.6), 
+        "Very High" = alpha("#DC143C", 0.6)
+    ))
+
+p <- p + geom_text_repel(
+    data = subset(df, Transformed_Log_Na >= 0.5 | Transformed_Log_Na <= -0.5),
+    aes(label = name_new, color = NULL, shape = NULL, fill = NULL), # fill = NULL 추가
+    box.padding = 0.5,
+    point.padding = 0.5,
+    show.legend = FALSE, 
+    segment.color = "black",
+    min.segment.length = 0
+)
+
+print(p)
