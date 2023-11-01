@@ -7,7 +7,7 @@ library(car)
 library(tidyverse)
 library(ggrepel)
 
-setwd("D:/github/R_coding/[사업] 2023_혼합음료/4. 양이온 표시기준 실제값 차이(Log변환)/Na")
+setwd("D:/github/Study/2. 연구사업(2023년)/6. 분석결과/data_analysis/Log chart_양이온 표시기준 실제값 차이(Log변환)/Na")
 
 ## Reading Data
 df <- read_excel("Na_data.xlsx")
@@ -154,14 +154,14 @@ p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Na, color=Level, fill=Level, sh
     geom_hline(yintercept=0, linetype="dashed", color = "red", size = 0.8) +
     geom_hline(yintercept=c(0.7, -0.7), linetype="dashed", color = "#4682B4", size = 0.5) +
     geom_hline(yintercept=c(1, -1), linetype="dashed", color = "#4682B4", size = 0.5) +
-    labs(title="Transformed Log 'Na' Values", x="Index", y="Transformed Log 'Na'") +
+    labs(x="Index", y="Log-transformed Na") +
     theme_minimal() +
     theme(
         axis.text.x = element_text(size = 15),
         axis.text.y = element_text(size = 15),
         plot.title = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_text(size = 20)
+        axis.title.x = element_text(size = 20, margin = margin(t = 15)),  # X축 레이블과 그래프 사이의 간격을 조절
+        axis.title.y = element_text(size = 20, margin = margin(r = 15))   # Y축 레이블과 그래프 사이의 간격을 조절
     ) +
     scale_colour_manual(values = c("Low" = "#2E8B57", "Medium" = "#FF8C00", "High" = "#D2691E", "Very High" = "#DC143C")) +
     scale_fill_manual(values = c(
