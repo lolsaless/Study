@@ -17,8 +17,8 @@ df <- read_excel("Mg_data.xlsx")
 df$Transformed_Mg <- df$Mg - df$Mg_max
 
 # Log Transformation
-df$Log_Mg_max <- log10(df$Mg_max + 1)
-df$Log_Mg <- log10(df$Mg + 1)
+df$Log_Mg_max <- log10(df$Mg_max)
+df$Log_Mg <- log10(df$Mg)
 
 # Log Transformed Mg
 df$Transformed_Log_Mg <- df$Log_Mg - df$Log_Mg_max
@@ -130,6 +130,7 @@ p <- ggplot(df, aes(x=row_num, y=Transformed_Log_Mg, color=Level, fill=Level, sh
     geom_hline(yintercept=0, linetype="dashed", color = "red", size = 0.8) +
     geom_hline(yintercept=c(0.7, -0.7), linetype="dashed", color = "#4682B4", size = 0.5) +
     geom_hline(yintercept=c(1, -1), linetype="dashed", color = "#4682B4", size = 0.5) +
+    geom_hline(yintercept=c(2, -2), linetype="dashed", color = "#4682B4", size = 0.5) +
     labs(x="Index", y="Log-transformed Mg") +
     theme_minimal() +
     theme(
