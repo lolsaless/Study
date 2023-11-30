@@ -18,14 +18,21 @@ head(iris.pca$x[,1:2], 10)
 library(ggfortify)
 autoplot(iris.pca, data = iris, color = 'Species') # 2ckdnjsdmfh 축소된 데이터 시각화
 
+library(readxl)
 
+water <- read_xlsx('water.xlsx')
 
-water.pca <- prcomp(PCA[6:18], center = T, scale. = T)
+water.pca <- prcomp(water[6:18], center = T, scale. = T)
 
 plot(water.pca, type = "l", main = "scree plot")
 
-autoplot(water.pca, data = PCA, color = 'part')
+autoplot(water.pca, data = water, color = 'part')
 
+
+biplot(water.pca)
+
+
+biplot(water.pca, cex = 0.7, xlabs = water[,5])
 
 ## 이미지 차원 축소
 
