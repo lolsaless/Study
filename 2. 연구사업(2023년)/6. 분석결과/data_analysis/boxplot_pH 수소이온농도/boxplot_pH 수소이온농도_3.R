@@ -29,7 +29,6 @@ p <- ggplot(data, aes(x = Products, y = pH, fill = Products)) +
     geom_hline(yintercept = 9.5, color = "red", linetype = "dashed") +
     annotate("text", x = Inf, y = 9.5, label = "Standard 9.5 <", vjust = -0.5, hjust = 6.5, color = "red") +
     annotate("text", x = Inf, y = 4.5, label = "Standard 4.5 >", vjust = -0.5, hjust = 6.5, color = "red") +
-    annotate("text", x = Inf, y = 7.89, label = "Standard 4.5 >", vjust = -0.5, hjust = 6.5, color = "red") +
     geom_text_repel(data = label_data, aes(label = name_new), nudge_x = 0.25, nudge_y = 0.25) +
     geom_text(data = max_values, aes(x = Products, y = max_pH, label = label), vjust = -1.5, color = "blue")
 
@@ -39,7 +38,7 @@ p <- p + geom_text(data = error_bars, aes(x = Products, y = lower, label = paste
 
 # Rest of the plot customization
 p + coord_cartesian(ylim = c(4, 10)) +
-    scale_fill_manual(values = c("Mineral-infused water" = '#FFD700', "Bottled water" = '#4682B4')) +
+    scale_fill_manual(values = c("Mineral-infused water" = '#36B7C3', "Bottled water" = '#3165AA')) +
     labs(title = "", x = "", y = "pH") +
     theme_minimal() +
     theme(
