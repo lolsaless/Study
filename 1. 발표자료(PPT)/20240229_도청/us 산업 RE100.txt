@@ -1,0 +1,55 @@
+Direction
+We will build RE100 clusters related to the 4th industrial sector such as digital centers and smart farms to ease the burden of power system supply and demand, balance power generation, and enhance the digital innovation ecosystem.
+We will expand decentralized power/hydrogen supply bases in idle urban spaces to expand the distribution of eco-friendly vehicles, prevent stranded assets of traditional energy infrastructure, and promote preemptive renewable energy transition.
+We will establish a scientific and objective data system to expand the spread of renewable energy, achieve carbon neutrality, and foster related industries.
+Initiatives
+Establishment and operation of RE100 clusters
+(Business contents) Establishment and operation of 4th industry and energy convergence infrastructure linking renewable energy (solar, hydrogen), data centers, smart farms, and gardens
+
+(Power Independence) Power self-sufficiency through large-scale hydrogen fuel cell and solar power generation facilities
+
+
+| Classification | Facility Configuration (inside) |
+|--------|----------------------------------------|
+| Energy | Hydrogen 40 MW, up to 10,000 square meters |
+| DC | B1F to B4, 60,000 square meters in total area
+| Smart farms | Up to 10,000 square meters |
+| Solar | Utilization of idle sites such as parking lots |
+| Other | City parks, upcycling centers, and various community amenities |
+
+(Pilot project sites) Idle sites such as roads, municipal-owned public land, unsold industrial complexes, and US military surplus land (selected through a municipal competition)
+
+(Budget required) Attracting private capital
+
+RE100 station construction and operation
+(Project Details)Establishment of infrastructure to generate and sell electricity by installing solar power + small-scale fuel cells on the rooftop of gas stations, and to provide fast charging services for electric vehicles
+
+(Energy)Solar (20kW), fuel cell (300kW)
+
+(Mobility) EV chargers (1 ultra-fast, 1 fast), shared PM charging, parking, and maintenance spaces
+
+(Services)Taxi, truck driver shelter, F&B stores, etc.
+
+(Promotion method) MOU (Memorandum of Understanding) with Gyeonggi-do and gas station or LPG charging station operators
+
+RE100 Platform Development
+(Energy platform) Build a database of energy resources such as energy usage by building, industrial sector, and renewable energy production by region
+
+- Spread BM incorporating renewable energy production and sales, demand response, and promote related industries
+
+- Activate energy IT technologies such as EaaS technology utilizing AI, big data analysis, etc.
+
+(Carbon Absorption Map) Scientific and objective calculation of carbon absorption through detailed survey of biological resources using airborne and ground Lidar surveys and hyperspectral remote sensing
+
+- Securing basic information to promote projects such as urban greening, new afforestation, and reforestation
+
+- Utilized for biodiversity surveys, providing spatial information on climate crisis vulnerable areas, etc.
+
+Discovering and fostering RE100 technologies
+(Establishment and operation of a carbon-neutral fund) Promote the creation of a carbon-neutral industrial ecosystem by discovering and investing in promising startups in eco-friendly and low-carbon fields (~2034)
+
+(Promote the creation of a fund totaling more than KRW 120 billion over 5 years through co-financing with Gyeonggi-do and the private sector)
+
+(Fostering promising environmental companies)Discovering promising environmental companies and providing growth opportunities through customized financial support, loan support, and domestic and overseas market development support
+
+(Carbon-neutral technology development)>Support for technology development and process improvement in the carbon-neutral field
