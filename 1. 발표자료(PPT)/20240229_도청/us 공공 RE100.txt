@@ -1,0 +1,40 @@
+1. Background
+Although the global RE100 is spreading in response to the climate crisis, the participation and implementation rate of RE100 is low due to the lack of awareness of RE100 among domestic companies.
+By utilizing various idle sites such as building rooftops and parking lots owned by Gyeonggi-do and its public institutions, cities, and counties, the government aims to proactively expand the spread of renewable energy to drive the spread of RE100 in the private sector.
+
+2. Business direction
+We will expand renewable energy generation facilities, expand energy efficiency, and transition to zero-energy buildings in order to achieve RE100 for the Metropolitan Government and 28 public institutions under the Metropolitan Government.
+By 2026, we will expand solar power generation facilities utilizing shared land owned by cities, towns, and counties to achieve RE100 for public institutions.
+
+3. Next action
+Utilizing Idle Sites for Renewable Energy Generation in Cities, Utilities, and Municipalities
+
+| Category | Implementation Plan |
+|-----------------|-------------------------------------------------|
+| Idle Site Owning Organizations | - Installing private (commercial) solar power on their own building rooftops, parking lots, and other idle sites |
+| | - Commercial solar installations utilizing idle sites in cities, towns, and counties |
+| | - Recognize electricity generation by reducing electricity consumption compared to the previous year |
+| Institutions that do not own idle sites | - Promote commercial solar installations utilizing idle sites in cities and counties |
+
+
+Green remodeling project promotes greater building energy efficiency through installation of high-efficiency equipment
+Promote the conversion of existing public buildings to Zero Energy Buildings (ZEB)
+Reflecting efforts and achievements to achieve RE100 in the management evaluation of public institution heads
+Develop and operate the Gyeonggi RE100 trading platform
+(Platform) Supports the implementation of RE100 by supplying (selling) renewable energy generated from solar power utilizing idle sites of public institutions and provincial support solar power supply projects to RE100 companies in the province.
+
+(Reinvestment) Revenue from renewable energy sales is reinvested in new solar power generation projects
+
+Promote the achievement of RE100 at public events held by Gyeonggi-do, its affiliated public institutions, and cities and counties
+Promote the expansion of renewable energy supply through the construction and operation of citizen-participatory (cooperative) solar power plants without financial input from the Gyeonggi-do government
+| Category | Implementation Plan |
+|----------------|------------------------------------------------------------|
+| Gyeonggi-do city/gun | - Shared site lease (use permit, loan fee revenue) |
+| | - Support for cooperative open call, facility safety diagnosis, and opening linkage costs |
+| Energy cooperatives | - Recruitment of members, installation of solar power generation facilities |
+| | - Pay rent and dividends, sell renewable energy certificates (RECs) to global RE100 companies |
+| Gyeonggi-do residents | - Invest in energy cooperatives and secure dividend income|
+
+
+
+Maximize the use of public funds for buildings owned or managed by public institutions, environmental infrastructure, etc.
