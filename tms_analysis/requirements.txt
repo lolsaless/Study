@@ -1,0 +1,15 @@
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+statsmodels>=0.14
+scikit-learn>=1.3
+
+# Intel Mac(x86_64)용 설치 호환 고정 (llvmlite 0.50 이상은 wheel이 없어 소스 빌드가 실패함)
+llvmlite==0.44.0; sys_platform == "darwin" and platform_machine == "x86_64"
+numba==0.61.2; sys_platform == "darwin" and platform_machine == "x86_64"
+
+# 선택(없으면 해당 부분만 대체 방법으로 실행)
+ruptures>=1.1
+pymannkendall>=1.4
+tslearn>=0.6
