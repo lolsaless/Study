@@ -49,17 +49,9 @@ ERR = {"941": "승인되지 않은 인증키 — 발급 때 등록한 이메일�
 
 
 def read_key(cli):
-    if cli:
-        return cli
-    if os.environ.get("HRFCO_KEY"):
-        return os.environ["HRFCO_KEY"]
-    f = DATA / "api_keys.env"
-    if f.exists():
-        for line in f.read_text(encoding="utf-8").splitlines():
-            if line.strip().startswith("HRFCO_KEY="):
-                return line.split("=", 1)[1].strip()
-    sys.exit("한강홍수통제소 인증키가 없습니다. --key, 환경변수 HRFCO_KEY, 또는 data/api_keys.env 에 HRFCO_KEY=키 를 넣으세요.")
-
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from _common import read_key as _rk
+    return _rk("HRFCO_KEY", cli)
 
 def get_json(url, retries=4):
     err = ""

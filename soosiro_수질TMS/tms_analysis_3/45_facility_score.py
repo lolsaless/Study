@@ -95,8 +95,18 @@ def main():
     rain_days = None
     if ev.exists():
         e = pd.read_csv(ev, encoding="utf-8-sig", parse_dates=["date"])
+    else:                       # 30번을 아직 안 돌린 새 환경: 같은 방법으로 바로 계산
+        from core.events import station_events, regional_events
+        try:
+            r_ = regional_events(station_events(io.load_daily(["Turb", "EC"], basins=["한강"])))
+            e = r_[r_["regional"]]
+        except FileNotFoundError:
+            e = pd.DataFrame(columns=["basin", "date"])
+    if len(e):
         rain_days = pd.DatetimeIndex(e.loc[e["basin"] == "한강", "date"])
-        rep.p(f"강우일: 30번이 하천 자료로 정의한 한강권 광역 사건일 {len(rain_days)}일(경기도 처리장에 적용).")
+        rep.p(f"강우일: 하천 자료로 정의한 한강권 광역 사건일 {len(rain_days)}일(30번 방법, 경기도 처리장에 적용).")
+    else:
+        rep.p("강우일 자료가 없어 '강우 대응' 영역은 빼고 계산했다(01·30번 실행 후 다시).")
 
     rows, yrows = [], []
     for sid, g in tms.groupby("sid"):
@@ -116,10 +126,13 @@ def main():
     X = np.column_stack([np.ones(len(t)), lq, lq ** 2])
     adj = pd.DataFrame(index=t.index)
     for dom in DOMAINS:
+        if t[dom].notna().sum() < 10:           # 자료가 없는 영역(예: 강우일 미정의)은 건너뜀
+            continue
         y = t[dom].fillna(t[dom].median()).values
         res = y - X @ np.linalg.lstsq(X, y, rcond=None)[0]
         adj[dom] = pd.Series(res, index=t.index).rank(pct=True) * 100
-    t["규모보정점수"] = sum(adj[k] * v for k, v in C.FACILITY_SCORE_WEIGHTS.items()) / sum(C.FACILITY_SCORE_WEIGHTS.values())
+    wts = {k: v for k, v in C.FACILITY_SCORE_WEIGHTS.items() if k in adj}
+    t["규모보정점수"] = sum(adj[k] * v for k, v in wts.items()) / sum(wts.values())
     t["등급"] = pd.qcut(t["종합점수"].rank(method="first"), 5, labels=["E", "D", "C", "B", "A"])
     t["약점 영역"] = t[list(DOMAINS)].idxmin(axis=1)
 
@@ -161,7 +174,7 @@ def main():
     low = t.sort_values("종합점수").head(20)
     cols = ["site", "sigun", "종합점수", "규모보정점수", "약점 영역", "빠듯한 항목", "p95/기준 최대", "초과일%", "TN 겨울/여름", "강우일 유량 배율", "결측%"]
     cols += [c for c in ["두 해 연속 하위20%"] if c in t]
-    rep.table(low.reset_index()[["sid"] + cols].round(2))
+    rep.table(low.reset_index()[["sid"] + [c for c in cols if c in t]].round(2))
     wk = t[t["등급"] == "E"]["약점 영역"].value_counts()
     rep.finding("하위 20%(E등급) 시설의 주된 약점: " + ", ".join(f"{k} {v}곳" for k, v in wk.items()))
     if "두 해 연속 하위20%" in t:

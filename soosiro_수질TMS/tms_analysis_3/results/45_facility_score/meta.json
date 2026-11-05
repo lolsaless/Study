@@ -1,6 +1,6 @@
 {
  "script": "45_facility_score.py",
- "run_at": "2026-11-05 06:32",
+ "run_at": "2026-11-05 06:49",
  "level": "연계",
  "status": "완료",
  "config": {

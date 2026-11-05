@@ -2,6 +2,20 @@
 
 > 새 대화에서 이어갈 때: `작업안내서.md` + 이 파일 + `results/00_핵심결과.md` 를 주고 "진행현황 보고 이어서 하자"라고 하면 된다.
 
+## 0. 새 세션에서 이어하기(체크리스트)
+
+1. 코드는 GitHub `main` 에 모두 있다(PR #3·#4 병합). 새 Claude Code 세션은 `CLAUDE.md` → `작업안내서.md` 를 자동으로 먼저 읽는다.
+2. git 에 없는 것(새 환경에서 다시 생기는 것)
+   - `work/`(캐시), `data/standard/river_hourly.csv.gz`(시간자료) → `python run_all.py full` 한 번이면 다시 만들어진다(약 3분).
+     `run_all.py full` 대신 번호만 돌려도 필요한 캐시가 없으면 대체 계산하도록 되어 있다(2026-11-05 새 환경 점검).
+   - `data/api_keys.env`(인증키) → 각 PC에 따로 둔다(작업안내서 3-B).
+   - 패키지 → `pip install -r requirements.txt`. 그림 한글이 깨지면 나눔고딕·맑은 고딕 설치.
+3. **진행 중이던 일(2026-11-05 기준)**
+   - [ ] 사용자: 물환경정보시스템 측정소 위치 정보 수집 완료 → `data/raw/nier_station_info/` 에 원본 그대로 넣고 커밋·푸시 예정
+   - [ ] Claude: 그 파일을 `data/meta/stations.csv` 의 lat·lon 에 반영. ⚠ 기본 매핑(merge)은 키가 같은 행을 통째로 바꾸므로
+         weather_stn·flow_obscd·upstream_tms 가 지워진다 → **좌표 칸만 채우는 방식**으로 반영할 것(측정소 이름으로 매칭, 일반측정망 지점 제외)
+   - [ ] 이어서 `tools/link_stations.py` → `tools/make_map.py` → `python run_all.py 32 40 41 42 43 44 45` → RESEARCH_REVIEW.md 숫자 갱신
+
 - 최종 갱신: 2026-11-05 (v3 최초 작성)
 - 담당: 조의호 (분석은 본인 PC VS Code, Python 3.12) · 코드 작성·검증: Claude(클라우드에서 전체 실행 확인)
 - 자료: 국가수질자동측정망 4대강 77개 측정소 2024–2025 시간자료(151개 xlsx) + 경기권 ASOS·홍수통제소 자료 + 경기도 방류수 TMS(tms_analysis_2)
