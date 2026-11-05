@@ -1,0 +1,8 @@
+{
+ "_설명": "기상 지점정보(지점,지점명,위도,경도,지점주소) → obs_stations(kind=weather)",
+ "target": "obs_stations",
+ "inputs": ["data/raw/kma_asos/weather_stations.csv"],
+ "columns": {"지점": "code", "지점명": "name", "위도": "lat", "경도": "lon", "지점주소": "address", "구분": "source"},
+ "constants": {"kind": "weather"},
+ "auto": true
+}

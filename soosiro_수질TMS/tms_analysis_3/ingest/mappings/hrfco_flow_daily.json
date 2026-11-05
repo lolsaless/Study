@@ -1,0 +1,8 @@
+{
+ "_설명": "한강홍수통제소 수위·유량 일자료(collect_hrfco.py 산출물) → flow_daily",
+ "target": "flow_daily",
+ "inputs": ["data/raw/hrfco/hrfco_waterlevel_daily.csv"],
+ "columns": {"wlobscd": "obscd", "obsnm": "obs_name", "time": "date", "wl_m": "wl_m", "flow_cms": "flow_cms"},
+ "constants": {"source": "HRFCO"},
+ "auto": true
+}

@@ -1,0 +1,8 @@
+{
+ "_설명": "한강홍수통제소 수위관측소 제원 → obs_stations(kind=flow). 위경도는 collect_hrfco.py 가 십진수로 바꾼 lat_dd/lon_dd",
+ "target": "obs_stations",
+ "inputs": ["data/raw/hrfco/hrfco_waterlevel_stations.csv"],
+ "columns": {"wlobscd": "code", "obsnm": "name", "lat_dd": "lat", "lon_dd": "lon", "addr": "address", "agcnm": "source"},
+ "constants": {"kind": "flow"},
+ "auto": true
+}

@@ -1,0 +1,9 @@
+{
+ "_설명": "한강홍수통제소 우량관측소 제원 → obs_stations(kind=rain). code 는 weather_daily.stn 과 맞추려고 'HR'+코드",
+ "target": "obs_stations",
+ "inputs": ["data/raw/hrfco/hrfco_rainfall_stations.csv"],
+ "columns": {"obsnm": "name", "lat_dd": "lat", "lon_dd": "lon", "addr": "address", "agcnm": "source"},
+ "derive": {"code": "'HR' + df['rfobscd'].astype(str)"},
+ "constants": {"kind": "rain"},
+ "auto": true
+}

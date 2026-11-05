@@ -1,0 +1,12 @@
+{
+ "_설명": "기상청 ASOS 일자료(기상자료개방포털 CSV 또는 collectors/collect_kma_asos.py 산출물) → weather_daily",
+ "target": "weather_daily",
+ "inputs": ["data/raw/kma_asos/kma_asos_daily*.csv", "data/inbox/kma_asos/*.csv"],
+ "read": {"encoding": "auto"},
+ "columns": {"지점": "stn", "지점명": "stn_name", "일시": "date"},
+ "columns_contains": {"rain_mm": "일강수량", "ta_mean": "평균기온", "ta_min": "최저기온", "ta_max": "최고기온"},
+ "constants": {"source": "ASOS"},
+ "fillna": {"rain_mm": 0},
+ "_주의": "기상청 일자료는 비가 오지 않은 날 강수가 빈칸이라 0 으로 채운다(fillna). 다른 출처는 빈칸=결측일 수 있으니 확인",
+ "auto": true
+}

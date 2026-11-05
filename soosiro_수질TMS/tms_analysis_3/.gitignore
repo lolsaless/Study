@@ -1,0 +1,12 @@
+# 다시 만들 수 있는 것
+work/
+__pycache__/
+data/standard/river_hourly.csv.gz
+results_for_claude.zip
+# 인증키·API 원문 캐시
+data/api_keys.env
+data/raw/*/_cache/
+# 새로 받은 자료는 표준화 후 raw 로 옮겨 커밋(작업안내서 3장)
+data/inbox/*
+!data/inbox/README.md
+.DS_Store

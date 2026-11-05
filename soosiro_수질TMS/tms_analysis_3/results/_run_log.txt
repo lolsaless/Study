@@ -1,0 +1,229 @@
+
+===== 2026-11-05 05:56:43 00_check_inputs.py OK 7s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_check_inputs/summary.md  (핵심 결과 1개, 상태: 완료)
+                     스크립트    상태
+       10_data_quality.py 실행 가능
+        11_descriptive.py 실행 가능
+           12_wq_grade.py 실행 가능
+      13_group_compare.py 실행 가능
+        20_seasonality.py 실행 가능
+              21_trend.py 실행 가능
+        22_diel_oxygen.py 실행 가능
+23_weekday_fingerprint.py 실행 가능
+   24_correlation_sync.py 실행 가능
+        25_changepoint.py 실행 가능
+     30_anomaly_events.py 실행 가능
+           31_typology.py 실행 가능
+       32_longitudinal.py 실행 가능
+       33_chla_drivers.py 실행 가능
+         34_bloom_risk.py 실행 가능
+      35_extreme_value.py 실행 가능
+    36_memory_spectral.py 실행 가능
+     37_forecast_skill.py 실행 가능
+ 38_network_redundancy.py 실행 가능
+       40_weather_link.py 실행 가능
+          41_flow_load.py 실행 가능
+           42_tms_link.py 실행 가능
+
+===== 2026-11-05 05:57:22 01_ingest_nier.py OK 40s =====
+[xlsx] 151개 파일
+  20/151 (캐시 20)
+  40/151 (캐시 40)
+  60/151 (캐시 60)
+  80/151 (캐시 80)
+  100/151 (캐시 100)
+  120/151 (캐시 120)
+  140/151 (캐시 140)
+  151/151 (캐시 151)
+[저장] data/standard/river_hourly.csv.gz  1,312,848행
+[저장] data/standard/river_daily.csv.gz  47,731행
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/01_ingest_nier/summary.md  (핵심 결과 1개, 상태: 완료)
+
+===== 2026-11-05 05:57:30 02_ingest_aux.py OK 7s =====
+  읽음 data/raw/hrfco/hrfco_waterlevel_daily.csv  271,776행
+[매핑 hrfco_flow_daily.json] → flow_daily  271,776행 · 열 ['obscd', 'obs_name', 'date', 'wl_m', 'flow_cms', 'source']
+[저장] data/standard/flow_daily.csv  271,776행
+  읽음 data/raw/hrfco/hrfco_rain_daily.csv  132,240행
+[매핑 hrfco_rain_daily.json] → weather_daily  132,240행 · 열 ['stn', 'stn_name', 'date', 'rain_mm', 'source']
+[저장] data/standard/weather_daily.csv  132,240행
+  읽음 data/raw/kma_asos/kma_asos_daily.csv  13,670행
+[매핑 kma_asos_daily.json] → weather_daily  13,670행 · 열 ['stn', 'stn_name', 'date', 'rain_mm', 'ta_mean', 'ta_min', 'ta_max', 'source']
+[저장] data/standard/weather_daily.csv  145,910행
+  읽음 data/raw/kma_asos/weather_stations.csv  160행
+[매핑 obs_stations_asos.json] → obs_stations  160행 · 열 ['code', 'name', 'lat', 'lon', 'address', 'source', 'kind']
+[저장] data/standard/obs_stations.csv  160행
+  읽음 data/raw/hrfco/hrfco_waterlevel_stations.csv  1,420행
+[매핑 obs_stations_hrfco.json] → obs_stations  1,420행 · 열 ['code', 'name', 'lat', 'lon', 'address', 'source', 'kind']
+[저장] data/standard/obs_stations.csv  1,580행
+  읽음 data/raw/hrfco/hrfco_rainfall_stations.csv  744행
+[매핑 obs_stations_hrfco_rain.json] → obs_stations  744행 · 열 ['name', 'lat', 'lon', 'address', 'source', 'kind', 'code']
+[저장] data/standard/obs_stations.csv  2,324행
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/02_ingest_aux/summary.md  (핵심 결과 6개, 상태: 완료)
+
+===== 2026-11-05 05:57:40 10_data_quality.py OK 10s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/10_data_quality/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 05:57:44 11_descriptive.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/11_descriptive/summary.md  (핵심 결과 6개, 상태: 완료)
+
+===== 2026-11-05 05:57:47 12_wq_grade.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/12_wq_grade/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 05:57:49 13_group_compare.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/13_group_compare/summary.md  (핵심 결과 16개, 상태: 완료)
+
+===== 2026-11-05 05:57:55 20_seasonality.py OK 6s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/20_seasonality/summary.md  (핵심 결과 7개, 상태: 완료)
+
+===== 2026-11-05 05:57:59 21_trend.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/21_trend/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 05:58:01 22_diel_oxygen.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/22_diel_oxygen/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 05:58:06 23_weekday_fingerprint.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/23_weekday_fingerprint/summary.md  (핵심 결과 2개, 상태: 완료)
+
+===== 2026-11-05 05:58:09 24_correlation_sync.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/24_correlation_sync/summary.md  (핵심 결과 2개, 상태: 완료)
+
+===== 2026-11-05 05:58:14 25_changepoint.py OK 5s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/25_changepoint/summary.md  (핵심 결과 1개, 상태: 완료)
+
+===== 2026-11-05 05:58:27 30_anomaly_events.py OK 13s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/30_anomaly_events/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 05:58:30 31_typology.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/31_typology/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 05:58:34 32_longitudinal.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/32_longitudinal/summary.md  (핵심 결과 6개, 상태: 완료)
+
+===== 2026-11-05 05:59:05 33_chla_drivers.py OK 32s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/33_chla_drivers/summary.md  (핵심 결과 12개, 상태: 완료)
+
+===== 2026-11-05 05:59:08 34_bloom_risk.py OK 2s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/34_bloom_risk/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 05:59:12 35_extreme_value.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/35_extreme_value/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 05:59:30 36_memory_spectral.py OK 18s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/36_memory_spectral/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:00:30 37_forecast_skill.py OK 60s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/37_forecast_skill/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 06:00:34 38_network_redundancy.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/38_network_redundancy/summary.md  (핵심 결과 2개, 상태: 완료)
+
+===== 2026-11-05 06:00:37 40_weather_link.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/40_weather_link/summary.md  (핵심 결과 7개, 상태: 완료)
+
+===== 2026-11-05 06:00:40 41_flow_load.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/41_flow_load/summary.md  (핵심 결과 10개, 상태: 완료)
+
+===== 2026-11-05 06:00:43 42_tms_link.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/42_tms_link/summary.md  (핵심 결과 4개, 상태: 완료)
+
+===== 2026-11-05 06:00:44 90_build_digest.py OK 1s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_핵심결과.md
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_DIGEST_for_Claude.md
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results_for_claude.zip (2.6 MB)
+
+===== 2026-11-05 06:01:20 00_check_inputs.py OK 7s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_check_inputs/summary.md  (핵심 결과 1개, 상태: 완료)
+                     스크립트    상태
+       10_data_quality.py 실행 가능
+        11_descriptive.py 실행 가능
+           12_wq_grade.py 실행 가능
+      13_group_compare.py 실행 가능
+        20_seasonality.py 실행 가능
+              21_trend.py 실행 가능
+        22_diel_oxygen.py 실행 가능
+23_weekday_fingerprint.py 실행 가능
+   24_correlation_sync.py 실행 가능
+        25_changepoint.py 실행 가능
+     30_anomaly_events.py 실행 가능
+           31_typology.py 실행 가능
+       32_longitudinal.py 실행 가능
+       33_chla_drivers.py 실행 가능
+         34_bloom_risk.py 실행 가능
+      35_extreme_value.py 실행 가능
+    36_memory_spectral.py 실행 가능
+     37_forecast_skill.py 실행 가능
+ 38_network_redundancy.py 실행 가능
+       40_weather_link.py 실행 가능
+          41_flow_load.py 실행 가능
+           42_tms_link.py 실행 가능
+
+===== 2026-11-05 06:01:26 10_data_quality.py OK 6s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/10_data_quality/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:01:30 11_descriptive.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/11_descriptive/summary.md  (핵심 결과 6개, 상태: 완료)
+
+===== 2026-11-05 06:01:33 12_wq_grade.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/12_wq_grade/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:01:36 13_group_compare.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/13_group_compare/summary.md  (핵심 결과 16개, 상태: 완료)
+
+===== 2026-11-05 06:01:42 20_seasonality.py OK 5s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/20_seasonality/summary.md  (핵심 결과 7개, 상태: 완료)
+
+===== 2026-11-05 06:01:45 21_trend.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/21_trend/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:01:48 22_diel_oxygen.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/22_diel_oxygen/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 06:01:52 23_weekday_fingerprint.py OK 5s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/23_weekday_fingerprint/summary.md  (핵심 결과 2개, 상태: 완료)
+
+===== 2026-11-05 06:01:55 24_correlation_sync.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/24_correlation_sync/summary.md  (핵심 결과 2개, 상태: 완료)
+
+===== 2026-11-05 06:02:00 25_changepoint.py OK 5s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/25_changepoint/summary.md  (핵심 결과 1개, 상태: 완료)
+
+===== 2026-11-05 06:02:13 30_anomaly_events.py OK 13s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/30_anomaly_events/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:02:16 31_typology.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/31_typology/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:02:20 32_longitudinal.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/32_longitudinal/summary.md  (핵심 결과 6개, 상태: 완료)
+
+===== 2026-11-05 06:02:52 33_chla_drivers.py OK 32s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/33_chla_drivers/summary.md  (핵심 결과 12개, 상태: 완료)
+
+===== 2026-11-05 06:02:55 34_bloom_risk.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/34_bloom_risk/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 06:02:59 35_extreme_value.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/35_extreme_value/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:03:17 36_memory_spectral.py OK 18s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/36_memory_spectral/summary.md  (핵심 결과 3개, 상태: 완료)
+
+===== 2026-11-05 06:04:13 37_forecast_skill.py OK 56s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/37_forecast_skill/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 06:04:17 38_network_redundancy.py OK 4s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/38_network_redundancy/summary.md  (핵심 결과 2개, 상태: 완료)
+
+===== 2026-11-05 06:04:20 40_weather_link.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/40_weather_link/summary.md  (핵심 결과 7개, 상태: 완료)
+
+===== 2026-11-05 06:04:24 41_flow_load.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/41_flow_load/summary.md  (핵심 결과 10개, 상태: 완료)
+
+===== 2026-11-05 06:04:26 42_tms_link.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/42_tms_link/summary.md  (핵심 결과 4개, 상태: 완료)
+
+===== 2026-11-05 06:04:27 90_build_digest.py OK 1s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_핵심결과.md
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_DIGEST_for_Claude.md
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results_for_claude.zip (2.5 MB)

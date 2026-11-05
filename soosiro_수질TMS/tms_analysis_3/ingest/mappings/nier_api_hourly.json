@@ -1,0 +1,12 @@
+{
+ "_설명": "collectors/collect_nier_api.py 산출물(시간자료) → 일 요약 → river_daily 에 합침. 측정소 이름이 stations.csv 와 다르면 rename_values 로 맞춘다",
+ "target": "river_daily",
+ "inputs": ["data/raw/nier_api/nier_api_hourly.csv"],
+ "columns": {"basin": "basin", "station": "station", "datetime": "datetime",
+             "WT": "WT", "pH": "pH", "EC": "EC", "DO": "DO", "Turb": "Turb", "TOC": "TOC", "TN": "TN", "TP": "TP", "Chl_a": "Chl_a"},
+ "datetime": {"col": "datetime", "format": null},
+ "rename_values": {"station": {}},
+ "aggregate_daily": true,
+ "auto": false,
+ "_주의": "처음 1회는 --dry-run 으로 값·이름을 확인한 뒤 auto 를 true 로 바꾸면 02번이 자동 실행"
+}

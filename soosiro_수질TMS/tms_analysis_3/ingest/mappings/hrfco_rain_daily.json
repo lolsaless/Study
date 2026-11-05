@@ -1,0 +1,8 @@
+{
+ "_설명": "한강홍수통제소 우량 일자료(collect_hrfco.py 산출물) → weather_daily (지점 = 'HR'+코드)",
+ "target": "weather_daily",
+ "inputs": ["data/raw/hrfco/hrfco_rain_daily.csv"],
+ "columns": {"지점": "stn", "지점명": "stn_name", "일시": "date", "일강수량(mm)": "rain_mm"},
+ "constants": {"source": "HRFCO"},
+ "auto": true
+}
