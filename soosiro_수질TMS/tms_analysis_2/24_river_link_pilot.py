@@ -12,7 +12,7 @@
 
 입력
   work/tms_clean.pkl (01번), data/tms_location_geocoded.csv(선택)
-  ../../물환경정보시스템_국가수질자동측정망/Raw data/Data/한강_일별.csv
+  ../../물환경정보시스템_국가수질자동측정망/Data/한강_일별.csv
 주의
   하천 측정소-상류 처리장 연결(UPSTREAM)은 행정구역 기반 '가설'이다. 중권역·표준유역 경계와
   측정소 좌표로 반드시 확인한 뒤 써야 한다. 하천 유량이 없으므로 부하 수지(기여율)는 계산하지 않는다.
@@ -30,14 +30,16 @@ import config as C
 from common import Report, load_clean, valid_sids, fdr
 
 def _find_river_csv():
-    """config.RIVER_DAILY_CSV 가 없으면 이 폴더의 상위 1~3단계에서 '물환경정보시스템_국가수질자동측정망/Raw data/Data/한강_일별.csv' 를 찾는다."""
+    """config.RIVER_DAILY_CSV 가 없으면 이 폴더의 상위 1~3단계에서 '물환경정보시스템_국가수질자동측정망/Data/한강_일별.csv'(옛 위치 Raw data/Data 도 허용)를 찾는다."""
     if getattr(C, "RIVER_DAILY_CSV", None):
         return Path(C.RIVER_DAILY_CSV)
-    rel = Path("물환경정보시스템_국가수질자동측정망") / "Raw data" / "Data" / "한강_일별.csv"
+    root = Path("물환경정보시스템_국가수질자동측정망")
+    rels = [root / "Data" / "한강_일별.csv", root / "Raw data" / "Data" / "한강_일별.csv"]   # 새 위치 먼저, 옛 위치도 허용
     for up in [C.BASE_DIR.parent, C.BASE_DIR.parent.parent, C.BASE_DIR.parent.parent.parent]:
-        if (up / rel).exists():
-            return up / rel
-    return C.BASE_DIR.parent.parent / rel
+        for rel in rels:
+            if (up / rel).exists():
+                return up / rel
+    return C.BASE_DIR.parent.parent / rels[0]
 
 
 RIVER_CSV = _find_river_csv()
@@ -133,6 +135,18 @@ def main():
     top = reg[reg["event"]].sort_values("share", ascending=False).head(25).reset_index()
     rep.table(top, "사건 측정소 비율 상위 광역 강우일")
 
+    # 기상청 강수(21번 산출물)와 일치도
+    if C.WEATHER_PKL.exists():
+        wx = pd.read_pickle(C.WEATHER_PKL)
+        rain = wx.groupby("date")["rain_mm"].mean()
+        rain2 = rain.rolling(2, min_periods=1).sum()          # 당일+전일(유출 지연)
+        j = reg.join(rain2.rename("rain_2d"), how="inner")
+        if len(j):
+            big = j["rain_2d"] >= 20
+            rep.kv({"검증: 하천 사건일의 도평균 2일 강수 중앙(mm)": j.loc[j["event"], "rain_2d"].median(),
+                    "검증: 비사건일의 도평균 2일 강수 중앙(mm)": j.loc[~j["event"], "rain_2d"].median(),
+                    "검증: 2일 강수 ≥20mm 날 중 하천 사건일 비율(%)": j.loc[big, "event"].mean() * 100,
+                    "검증: 하천 사건일 중 2일 강수 <5mm 비율(%)": (j.loc[j["event"], "rain_2d"] < 5).mean() * 100})
     # TMS 고유량일(04번)과 일치도
     f04 = C.RESULTS_DIR / "04_flow_analysis" / "regional_flow_signal_by_date.csv"
     if f04.exists():

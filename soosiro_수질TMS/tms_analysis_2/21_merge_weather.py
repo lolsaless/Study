@@ -106,8 +106,9 @@ def haversine(lat1, lon1, lat2, lon2):
     return 2 * R * np.arcsin(np.sqrt(a))
 
 
-def build_weights(sites, st, avail):
-    """처리장별 {지점: 가중치}와 매칭 방법"""
+def build_weights(sites, st, avail, max_km=None):
+    """처리장별 {지점: 가중치}와 매칭 방법. max_km: 이 거리 안의 가까운 WEATHER_K 개 지점 사용"""
+    max_km = C.WEATHER_MAX_KM if max_km is None else max_km
     coords = None
     if C.SITE_COORDS_CSV.exists():
         coords = pd.read_csv(C.SITE_COORDS_CSV, encoding="utf-8-sig")
@@ -121,7 +122,7 @@ def build_weights(sites, st, avail):
             la, lo = coords.loc[site, "lat"], coords.loc[site, "lon"]
             d = haversine(la, lo, st["lat"].values, st["lon"].values)
             order = np.argsort(d)
-            near = [i for i in order[:C.WEATHER_K] if d[i] <= C.WEATHER_MAX_KM]
+            near = [i for i in order[:C.WEATHER_K] if d[i] <= max_km]
             if not near:
                 near = [order[0]]
                 method = "좌표-최근접(반경 밖)"
@@ -176,17 +177,25 @@ def main():
     df = load_clean(types=None)
     sites = df.groupby("site")["sigun"].first()
     avail = sorted(w["stn"].unique())
-    W, meta = build_weights(sites, st, avail)
+    # 강수와 기온은 지점을 따로 고른다(우량계처럼 강수만 있는 지점이 섞여도 기온이 비지 않도록)
+    avail_rain = sorted(w.loc[w["rain_mm"].notna(), "stn"].unique())
+    avail_temp = sorted(w.loc[w["ta_mean"].notna(), "stn"].unique())
+    W_rain, meta = build_weights(sites, st, avail_rain, C.WEATHER_MAX_KM)
+    W_temp, meta_t = build_weights(sites, st, avail_temp, getattr(C, "WEATHER_MAX_KM_TEMP", C.WEATHER_MAX_KM))
+    meta = meta.merge(meta_t[["site", "매칭방법", "지점"]].rename(columns={"매칭방법": "기온_매칭방법", "지점": "기온_지점"}), on="site")
     rep.h("1. 처리장-기상지점 매칭")
-    rep.table(meta["매칭방법"].value_counts().rename_axis("방법").reset_index(name="사업장 수"))
+    rep.kv({"강수 지점 수": len(avail_rain), "기온 지점 수": len(avail_temp),
+            "강수 반경(km)": C.WEATHER_MAX_KM, "기온 반경(km)": getattr(C, "WEATHER_MAX_KM_TEMP", C.WEATHER_MAX_KM)})
+    rep.table(meta["매칭방법"].value_counts().rename_axis("강수 매칭방법").reset_index(name="사업장 수"))
+    rep.table(meta["기온_매칭방법"].value_counts().rename_axis("기온 매칭방법").reset_index(name="사업장 수"))
     rep.csv(meta, "site_station_matching.csv")
-    rep.table(meta[meta["매칭방법"].str.contains("실패|반경 밖")], "확인이 필요한 매칭")
+    rep.table(meta[meta["매칭방법"].str.contains("실패|반경 밖")], "확인이 필요한 강수 매칭")
 
     piv = {v: w.pivot_table(index="date", columns="stn", values=v, aggfunc="first") for v in
            ["rain_mm", "ta_mean", "ta_min", "ta_max"]}
     out = []
     for site in sites.index:
-        d = pd.DataFrame({v: weighted(piv[v], W[site]) for v in piv})
+        d = pd.DataFrame({v: weighted(piv[v], (W_rain if v == "rain_mm" else W_temp)[site]) for v in piv})
         d = d.asfreq("D")
         d["rain_3d"] = d["rain_mm"].rolling(3, min_periods=1).sum()
         api = np.zeros(len(d))

@@ -26,6 +26,13 @@
 
 ## B. 기상자료 (필수)
 
+> **2026-11-05 추가 — API로 자동 수집(수동 다운로드 대신)**
+> - 인증키는 `data/api_keys.env`(git 제외)에 한 줄씩: `KMA_AUTH_KEY=...`, `HRFCO_KEY=...`
+> - `python collect_kma_asos.py` — 기상청 API허브 **ASOS 시간자료**(kma_sfctm3, 활용신청 완료된 키로 동작) → `data/weather/kma_asos_daily.csv`, `data/weather_hourly/kma_asos_hourly.csv.gz`, `data/weather_stations.csv`(ASOS 15개 지점)
+> - `python collect_hrfco.py` — 한강홍수통제소 **우량(강수)·수위·유량** → `data/weather/hrfco_rain_daily.csv`(AWS 대용 조밀 강수망), `data/river_flow/hrfco_waterlevel_daily.csv`. **해외 클라우드 접속이 차단되므로 국내 PC에서 실행.** 처음엔 `--test`로 응답 형식 확인.
+> - AWS·ASOS 일자료·지점정보 API는 API허브에서 따로 활용신청해야 한다(현재 키로는 403). 한강홍수통제소 우량계가 있으면 AWS 없이도 강수 매칭이 조밀해진다.
+
+
 ### B-1. `data/weather/` — 기상청 일자료 (파일 여러 개 가능)
 - 출처: 기상청 기상자료개방포털(data.kma.go.kr) → 데이터 → 기상관측 → 지상
   - **종관기상관측(ASOS) 일자료**: 경기도 지점 전부 + 서울·인천·강원 인접 지점(경계 처리장용)
