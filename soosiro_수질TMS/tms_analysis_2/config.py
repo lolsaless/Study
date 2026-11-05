@@ -32,6 +32,7 @@ RIVER_DAILY_CSV = None
 SITE_GEOCODED_CSV = DATA_DIR / "tms_location_geocoded.csv"   # geocode_tms_location.py 산출물
 
 WEATHER_MAX_KM = 15         # 처리장-기상지점 최대 거리(좌표가 있을 때)
+WEATHER_MAX_KM_TEMP = 40    # 기온은 공간 변동이 작아 더 먼 지점까지 사용(ASOS만 있을 때)
 WEATHER_K = 3               # 가까운 지점 몇 개를 거리가중 평균할지
 WET_DAY_MM = 1.0            # 강수일 기준(mm)
 DRY_PRIOR_DAYS = 3          # '건기일' = 당일 포함 직전 n일 강수 < WET_DAY_MM

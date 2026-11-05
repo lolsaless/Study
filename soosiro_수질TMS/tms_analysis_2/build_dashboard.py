@@ -51,9 +51,9 @@ STATUS = {
     "17_multi_outlet": ("사용", ""),
     "18_extreme_value": ("v2 재실행", "SS 발산·TP 지역기준 문제 → v2에서 보정"),
     "19_lead_lag_granger": ("v2 재실행", "그랜저 검정 실패 → v2에서 호환 수정"),
-    "21_merge_weather": ("자료 대기", "기상청 일자료 필요"),
-    "22_rain_response": ("자료 대기", "21번 이후"),
-    "23_temperature_threshold": ("자료 대기", "21번 이후"),
+    "21_merge_weather": ("사용(ASOS)", "ASOS 15지점 — 강수는 대부분 15km 밖, 한강홍수통제소 우량계 추가 시 재실행"),
+    "22_rain_response": ("사용(ASOS)", "강수 지점이 성김 — 우량계 추가 후 재확인"),
+    "23_temperature_threshold": ("사용", "기온은 ASOS 40km 거리가중으로 충분"),
     "24_river_link_pilot": ("예비", "하천-처리장 연결은 행정구역 가설, 하천 유량 없음"),
 }
 

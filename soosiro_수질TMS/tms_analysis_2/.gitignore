@@ -1,2 +1,5 @@
 data/_boundary_cache/
 __pycache__/
+data/api_keys.env
+data/weather_raw/
+work/weather_by_site.pkl

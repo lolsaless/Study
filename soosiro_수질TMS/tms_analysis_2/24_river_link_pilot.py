@@ -133,6 +133,18 @@ def main():
     top = reg[reg["event"]].sort_values("share", ascending=False).head(25).reset_index()
     rep.table(top, "사건 측정소 비율 상위 광역 강우일")
 
+    # 기상청 강수(21번 산출물)와 일치도
+    if C.WEATHER_PKL.exists():
+        wx = pd.read_pickle(C.WEATHER_PKL)
+        rain = wx.groupby("date")["rain_mm"].mean()
+        rain2 = rain.rolling(2, min_periods=1).sum()          # 당일+전일(유출 지연)
+        j = reg.join(rain2.rename("rain_2d"), how="inner")
+        if len(j):
+            big = j["rain_2d"] >= 20
+            rep.kv({"검증: 하천 사건일의 도평균 2일 강수 중앙(mm)": j.loc[j["event"], "rain_2d"].median(),
+                    "검증: 비사건일의 도평균 2일 강수 중앙(mm)": j.loc[~j["event"], "rain_2d"].median(),
+                    "검증: 2일 강수 ≥20mm 날 중 하천 사건일 비율(%)": j.loc[big, "event"].mean() * 100,
+                    "검증: 하천 사건일 중 2일 강수 <5mm 비율(%)": (j.loc[j["event"], "rain_2d"] < 5).mean() * 100})
     # TMS 고유량일(04번)과 일치도
     f04 = C.RESULTS_DIR / "04_flow_analysis" / "regional_flow_signal_by_date.csv"
     if f04.exists():
