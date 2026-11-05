@@ -71,3 +71,79 @@
 
 ===== 2026-11-05 10:09:11 build_dashboard.py OK 2s =====
 [완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/dashboard.html  (5.0 MB, 보고서 22개)
+
+===== 2026-11-05 13:46:55 01_preprocess.py OK 15s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/01_preprocess/summary.md
+
+===== 2026-11-05 13:47:11 02_data_quality.py OK 16s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/02_data_quality/summary.md
+
+===== 2026-11-05 13:47:25 03_descriptive_stats.py OK 14s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/03_descriptive_stats/summary.md
+
+===== 2026-11-05 13:47:33 04_flow_analysis.py OK 8s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/04_flow_analysis/summary.md
+
+===== 2026-11-05 13:47:41 05_compliance_margin.py OK 7s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/05_compliance_margin/summary.md
+
+===== 2026-11-05 13:49:04 06_seasonality_stl.py OK 84s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/06_seasonality_stl/summary.md
+
+===== 2026-11-05 13:49:20 07_weekday_holiday.py OK 16s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/07_weekday_holiday/summary.md
+
+===== 2026-11-05 13:49:28 08_trend_mannkendall.py OK 8s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/08_trend_mannkendall/summary.md
+
+===== 2026-11-05 13:49:56 09_changepoint.py OK 27s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/09_changepoint/summary.md
+
+===== 2026-11-05 13:51:35 10_anomaly_detection.py OK 99s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/10_anomaly_detection/summary.md
+
+===== 2026-11-05 13:51:49 11_param_correlation_cq.py OK 15s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/11_param_correlation_cq/summary.md
+
+===== 2026-11-05 13:51:56 12_cross_site_sync.py OK 6s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/12_cross_site_sync/summary.md
+
+===== 2026-11-05 13:52:09 13_typology_clustering.py OK 13s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/13_typology_clustering/summary.md
+
+===== 2026-11-05 13:52:49 14_shape_clustering.py OK 40s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/14_shape_clustering/summary.md
+
+===== 2026-11-05 13:53:01 15_autocorr_spectral.py OK 12s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/15_autocorr_spectral/summary.md
+
+===== 2026-11-05 13:53:05 16_load_contribution.py OK 4s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/16_load_contribution/summary.md
+
+===== 2026-11-05 13:53:09 17_multi_outlet.py OK 5s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/17_multi_outlet/summary.md
+
+===== 2026-11-05 13:54:39 18_extreme_value.py OK 90s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/18_extreme_value/summary.md
+
+===== 2026-11-05 13:55:17 19_lead_lag_granger.py OK 38s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/19_lead_lag_granger/summary.md
+
+===== 2026-11-05 13:55:26 21_merge_weather.py OK 9s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/21_merge_weather/summary.md
+
+===== 2026-11-05 13:55:50 22_rain_response.py OK 24s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/22_rain_response/summary.md
+
+===== 2026-11-05 13:56:02 23_temperature_threshold.py OK 13s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/23_temperature_threshold/summary.md
+
+===== 2026-11-05 13:56:20 24_river_link_pilot.py OK 17s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/24_river_link_pilot/summary.md
+
+===== 2026-11-05 13:56:21 20_build_digest.py OK 2s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results/00_DIGEST_for_Claude.md
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/results_for_claude.zip  (6.5 MB)
+
+===== 2026-11-05 13:56:22 build_dashboard.py OK 1s =====
+[완료] /Users/mac/Documents/GitHub/Study/soosiro_수질TMS/tms_analysis_2/dashboard.html  (5.7 MB, 보고서 23개)
