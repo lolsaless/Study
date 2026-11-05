@@ -1,0 +1,14 @@
+{
+ "script": "00_check_inputs.py",
+ "run_at": "2026-11-05 06:01",
+ "level": "준비",
+ "status": "완료",
+ "config": {
+  "MIN_HOURS": 18,
+  "MIN_DAYS": 300,
+  "ROLL_WIN": 31,
+  "ANOMALY_Z": 5.0,
+  "BLOOM_CHLA": 25.0,
+  "TARGET_GRADE": "II"
+ }
+}

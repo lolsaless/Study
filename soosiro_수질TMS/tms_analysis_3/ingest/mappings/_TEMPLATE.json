@@ -1,0 +1,20 @@
+{
+ "_설명": "새 자료용 매핑 양식. 복사해서 이름을 바꾸고 빈칸을 채운다(키 설명은 ingest/mapper.py 맨 위)",
+ "target": "river_daily | river_hourly | weather_daily | flow_daily | obs_stations | stations",
+ "inputs": ["data/inbox/<자료이름>/*.csv"],
+ "read": {"encoding": "auto", "sheet": 0, "header_row": 0},
+ "filename_regex": "",
+ "columns": {"원본 열 이름": "표준 열 이름"},
+ "columns_contains": {},
+ "pivot_long": null,
+ "datetime": null,
+ "constants": {"source": "출처"},
+ "derive": {},
+ "scale": {},
+ "fillna": {},
+ "filters": [],
+ "rename_values": {},
+ "aggregate_daily": false,
+ "keep_extra": false,
+ "auto": false
+}

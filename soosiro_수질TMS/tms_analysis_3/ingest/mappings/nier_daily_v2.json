@@ -1,0 +1,13 @@
+{
+ "_설명": "기존 merge_water_day.py 산출물(권역_일별_전체.csv) → river_daily. 원자료 xlsx 가 없을 때 01번이 자동 사용",
+ "target": "river_daily",
+ "inputs": ["data/raw/nier_auto_daily_v2/*_일별_전체.csv"],
+ "read": {"encoding": "utf-8-sig"},
+ "columns": {"하천": "basin", "측정소": "station", "날짜": "date", "시간기록수": "n_records"},
+ "rename_values": {"station": {"동북호": "동복호"}},
+ "keep_extra": true,
+ "drop": ["연도", "월"],
+ "derive": {},
+ "filters": [],
+ "mode": "replace"
+}

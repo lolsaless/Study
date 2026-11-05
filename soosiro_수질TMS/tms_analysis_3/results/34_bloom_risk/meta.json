@@ -1,0 +1,19 @@
+{
+ "script": "34_bloom_risk.py",
+ "run_at": "2026-11-05 06:02",
+ "level": "심화",
+ "입력 자료": {
+  "행 수": "47731",
+  "기간": "2024-01-01 ~ 2025-12-31",
+  "측정소 수": "77"
+ },
+ "status": "완료",
+ "config": {
+  "MIN_HOURS": 18,
+  "MIN_DAYS": 300,
+  "ROLL_WIN": 31,
+  "ANOMALY_Z": 5.0,
+  "BLOOM_CHLA": 25.0,
+  "TARGET_GRADE": "II"
+ }
+}
