@@ -42,6 +42,9 @@ RAW = DATA / "weather_raw" / "hrfco"
 API = "https://api.hrfco.go.kr/{key}/{hydro}/{kind}"
 BBOX = (36.85, 38.35, 126.35, 127.95)     # 위도 최소·최대, 경도 최소·최대 (경기도 + 경계 여유)
 ID_COL = {"waterlevel": "wlobscd", "rainfall": "rfobscd"}
+# 한강홍수통제소 Open API 오류코드(공식 API 레퍼런스 기준)
+ERR = {"941": "승인되지 않은 인증키 — 발급 때 등록한 이메일로 온 승인 메일에서 승인을 완료하세요(스팸함 확인).",
+       "943": "휴면 상태의 인증키 — 한강홍수통제소 누리집 '인증키 관리'에서 휴면을 해제하세요."}
 
 
 def read_key(cli):
@@ -90,9 +93,10 @@ def stations(key, hydro):
     js, err = get_json(url)
     if js is None:
         sys.exit(f"{hydro} 관측소 제원 요청 실패: {err}\n(국내 인터넷인지, 인증키가 맞는지 확인)")
-    d = pd.DataFrame(js.get("content", []))
+    d = pd.DataFrame(js.get("content", []) or [])
     if d.empty:
-        sys.exit(f"{hydro} 관측소 제원이 비어 있음: {str(js)[:300]}")
+        code = str(js.get("code", "")) if isinstance(js, dict) else ""
+        sys.exit(f"{hydro} 관측소 제원이 비어 있음(오류코드 {code or '없음'}): {ERR.get(code, str(js)[:300])}")
     d["lat_dd"] = d["lat"].map(dms)
     d["lon_dd"] = d["lon"].map(dms)
     la0, la1, lo0, lo1 = BBOX
