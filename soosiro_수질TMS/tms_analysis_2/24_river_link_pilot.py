@@ -12,7 +12,7 @@
 
 입력
   work/tms_clean.pkl (01번), data/tms_location_geocoded.csv(선택)
-  ../../물환경정보시스템_국가수질자동측정망/Raw data/Data/한강_일별.csv
+  ../../물환경정보시스템_국가수질자동측정망/Data/한강_일별.csv
 주의
   하천 측정소-상류 처리장 연결(UPSTREAM)은 행정구역 기반 '가설'이다. 중권역·표준유역 경계와
   측정소 좌표로 반드시 확인한 뒤 써야 한다. 하천 유량이 없으므로 부하 수지(기여율)는 계산하지 않는다.
@@ -30,14 +30,16 @@ import config as C
 from common import Report, load_clean, valid_sids, fdr
 
 def _find_river_csv():
-    """config.RIVER_DAILY_CSV 가 없으면 이 폴더의 상위 1~3단계에서 '물환경정보시스템_국가수질자동측정망/Raw data/Data/한강_일별.csv' 를 찾는다."""
+    """config.RIVER_DAILY_CSV 가 없으면 이 폴더의 상위 1~3단계에서 '물환경정보시스템_국가수질자동측정망/Data/한강_일별.csv'(옛 위치 Raw data/Data 도 허용)를 찾는다."""
     if getattr(C, "RIVER_DAILY_CSV", None):
         return Path(C.RIVER_DAILY_CSV)
-    rel = Path("물환경정보시스템_국가수질자동측정망") / "Raw data" / "Data" / "한강_일별.csv"
+    root = Path("물환경정보시스템_국가수질자동측정망")
+    rels = [root / "Data" / "한강_일별.csv", root / "Raw data" / "Data" / "한강_일별.csv"]   # 새 위치 먼저, 옛 위치도 허용
     for up in [C.BASE_DIR.parent, C.BASE_DIR.parent.parent, C.BASE_DIR.parent.parent.parent]:
-        if (up / rel).exists():
-            return up / rel
-    return C.BASE_DIR.parent.parent / rel
+        for rel in rels:
+            if (up / rel).exists():
+                return up / rel
+    return C.BASE_DIR.parent.parent / rels[0]
 
 
 RIVER_CSV = _find_river_csv()
