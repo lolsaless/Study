@@ -1,6 +1,7 @@
 # TMS 일자료 분석 패키지 v2
 
 > 진행상황은 `PROJECT_STATUS.md`, 모아야 할 자료는 `DATA_SPEC.md`(양식은 `templates/`)를 보세요.
+> 연구 방향·SCI 논문화 검토는 `RESEARCH_REVIEW.md`를 보세요.
 
 경기도 TMS 일자료만으로 바로 얻을 수 있는 인사이트를 분석법별 스크립트로 나눠 둔 패키지입니다.
 각 스크립트는 독립 실행되며, 결과는 `results/<번호_이름>/summary.md`(Claude가 읽는 요약) + CSV + 그림으로 저장됩니다.
@@ -73,6 +74,8 @@ pip install -r requirements.txt
 | 21 | 기상자료 결합 | 처리장별 일 강수·기온, TMS 고유량일 검증 (기상자료 필요) |
 | 22 | 강우 반응 | I/I 지수, 회복일, 장마 후 침입수, 용량 천장, 비 온 날 수질, TP 여름 건기 검정, 명절 건기 재계산 |
 | 23 | 기온 임계값 | TN 꺾인선 회귀(임계기온·기울기), TP 수온 가설, 공법별 비교 |
+| 24 | TMS×하천 연계(예비) | 하천(탁도·EC)으로 정의한 강우일의 방류수 반응, 같은 날 하천 반응, 하천의 요일 지문 (한강_일별.csv 필요) |
+| geocode_tms_location | 좌표 변환 | `tms_location.csv` → `tms_location_geocoded.csv`·`site_coords.csv`(리·동 중심, VWorld 키로 번지 단위 정밀화) |
 | build_dashboard | HTML 대시보드 | `dashboard.html` 한 파일(인터넷 없이 열림) |
 
 ## 5. Claude에게 줄 것

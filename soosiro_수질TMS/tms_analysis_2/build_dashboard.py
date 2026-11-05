@@ -54,6 +54,7 @@ STATUS = {
     "21_merge_weather": ("자료 대기", "기상청 일자료 필요"),
     "22_rain_response": ("자료 대기", "21번 이후"),
     "23_temperature_threshold": ("자료 대기", "21번 이후"),
+    "24_river_link_pilot": ("예비", "하천-처리장 연결은 행정구역 가설, 하천 유량 없음"),
 }
 
 

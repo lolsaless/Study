@@ -27,6 +27,9 @@ SITE_FACILITY_CSV = DATA_DIR / "site_facility.csv"  # (선택) site,capacity_m3d
 SIGUN_SEWER_CSV = DATA_DIR / "sigun_sewer.csv"      # (선택) sigun,separate_sewer_pct,... 하수도통계
 VALIDATION_FLOW_CSV = DATA_DIR / "validation_flow.csv"  # (선택) site,date,inflow_m3d,outflow_m3d — 역산 유량 검증
 WEATHER_PKL = WORK_DIR / "weather_by_site.pkl"      # 21_merge_weather.py 산출물
+# [24번] 국가수질자동측정망 한강권역 일자료(merge_water_day.py 산출물). None 이면 상위 폴더에서 자동으로 찾는다.
+RIVER_DAILY_CSV = None
+SITE_GEOCODED_CSV = DATA_DIR / "tms_location_geocoded.csv"   # geocode_tms_location.py 산출물
 
 WEATHER_MAX_KM = 15         # 처리장-기상지점 최대 거리(좌표가 있을 때)
 WEATHER_K = 3               # 가까운 지점 몇 개를 거리가중 평균할지
