@@ -12,19 +12,23 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 KEYS = BASE / "data" / "api_keys.env"
+KEYS_V2 = BASE.parent / "tms_analysis_2" / "data" / "api_keys.env"   # v2 에서 쓰던 키 파일도 그대로 인식
 
 
 def read_key(name: str, cli: str | None = None) -> str:
-    """--key 인자 → 환경변수 → data/api_keys.env 의 NAME=값 순서로 찾는다(저장소에 키를 올리지 말 것)"""
+    """--key 인자 → 환경변수 → tms_analysis_3/data/api_keys.env → tms_analysis_2/data/api_keys.env 순서로 찾는다.
+    키 파일은 .gitignore 로 git 에서 빠진다. 저장소·코드·문서에 키를 직접 쓰지 말 것."""
     if cli:
         return cli
     if os.environ.get(name):
         return os.environ[name]
-    if KEYS.exists():
-        for line in KEYS.read_text(encoding="utf-8").splitlines():
-            if line.strip().startswith(f"{name}="):
-                return line.split("=", 1)[1].strip()
-    sys.exit(f"인증키 {name} 가 없습니다. data/api_keys.env 에 {name}=키 한 줄을 넣으세요(양식: collectors/api_keys.env.example).")
+    for f in (KEYS, KEYS_V2):
+        if f.exists():
+            for line in f.read_text(encoding="utf-8").splitlines():
+                if line.strip().startswith(f"{name}=") and line.split("=", 1)[1].strip():
+                    return line.split("=", 1)[1].strip()
+    sys.exit(f"인증키 {name} 가 없습니다. tms_analysis_3/data/api_keys.env 에 {name}=키 한 줄을 넣으세요"
+             "(양식: collectors/api_keys.env.example, 설명: 작업안내서.md 3-B).")
 
 
 def get_json(url: str, params: dict | None = None, retries: int = 4, timeout: int = 60):
