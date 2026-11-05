@@ -15,8 +15,9 @@
 | 중급 | 20~25 | 완료·실행 확인 | 21 추세는 2개 연도라 예비 |
 | 심화 | 30~38 | 완료·실행 확인 | 37 예측은 지속 예측을 거의 못 넘음(자료 2년) |
 | 연계 | 40, 41, 42 | 한강 위주 실행 | 연결 정보가 추정 → 자료요구서 A-1·A-3 |
+| 연구 방향 | 43 부하 수지, 44 강우 초과 부하, 45 처리시설 평가 | 실행 확인 | RESEARCH_REVIEW.md. 45 는 방류수 기준 지역 입력 전 잠정 |
 | 수집 | collectors/* | 작성, **미실행** | 키가 필요하고, 클라우드에서는 일부 기관 접속 불가 → 사용자 PC 에서 `--test` 부터 |
-| 도구 | peek, make_mapping, mapper, link_stations | 실행 확인 | link_stations 는 좌표가 들어오면 사용 |
+| 도구 | peek, make_mapping, mapper, link_stations, assign_upstream, make_map | 실행 확인 | assign_upstream 은 가상 경계로 시험(경계 파일 필요), make_map 은 Leaflet CDN 필요(PC 에서 열기) |
 
 ## 2. 주요 결과(1차, 2026-11-05)
 
@@ -32,9 +33,15 @@
 10. **유량·부하(한강 11곳)**: TP 는 유출형(C–Q b≈+0.6), 연간 TP 부하의 54%가 유량 상위 10% 날에 이동. 신천 TOC 는 모든 유황에서 목표 초과 = 점오염.
 11. **측정망 중복도**: 고유 정보가 큰 측정소 밀양·충주·현도·안동댐하류·진주 / 중복이 큰 측정소 강천·감천·풍양(재현 R² ~0.6).
 
+12. **연구 방향 검토(RESEARCH_REVIEW.md)**: ① 부하 수지 — 신천 저유량 하천 물의 55%가 처리수, TOC 부하 중 방류 TMS 몫 74%(저유량)→12%(고유량) / 청미천 TP·TOC·TN 부하의 96~99%가 TMS 밖. 경안천·복하천은 유량·연결 불일치로 보류.
+    ② 강우 — 희석 예상 대비 초과: TP 61%·TOC 76%·TN 59% 사건일, 같은 날 방류 TMS 는 ×1.0~1.09. 유기물·질소형(월류 의심) 사건 다발: 신천·강천·구리·양평.
+    ③ 처리시설 평가 — 187곳, 연도 간 순위 ρ=0.59(2년 평균 필요), 두 해 연속 하위 20% 14곳. 방류수 기준 지역 미입력으로 하위권이 서남부(TP)로 쏠림 → site_region.csv 입력이 최우선.
+
 ## 3. 다음 할 일
 
 **조의호**
+- [ ] (★★★) 처리장 방류수 기준 지역 `../tms_analysis_2/data/site_region.csv` 입력 → `python run_all.py 45` (자료요구서 D-1b)
+- [ ] (★★★) 표준유역·단위유역 경계 GeoJSON → `data/raw/gis/` → `tools/assign_upstream.py` (RESEARCH_REVIEW.md 1.6)
 - [ ] (★★★) 측정소 좌표 받기 → `templates/station_info_request.csv` 채워 `data/meta/stations.csv` 에 반영 (자료요구서 A-1)
 - [ ] (★★★) 공공데이터포털 키 발급: 기상청 ASOS 일자료, 국립환경과학원 수질 DB → `data/api_keys.env`
 - [ ] PC 에서 `python collectors/collect_kma_asos_daily.py --test` → 실행 → `python run_all.py link`
@@ -43,10 +50,13 @@
 - [ ] `config.py` 생활환경기준·`BLOOM_CHLA` 를 현행 기준과 대조
 
 **Claude**
+- [ ] 경계·좌표가 오면 43·44 재실행, 경안천·복하천 정합성 재점검, RESEARCH_REVIEW.md 숫자 갱신
+- [ ] 44번 시간자료 이벤트(첫 세척) 분석 추가, 시군 분류식 비율로 월류 판정 보강
 - [ ] 좌표가 오면 `tools/link_stations.py` 로 연결 확정, 32·40·41·42 재실행·해석
 - [ ] 수질측정망(채수) 자료가 오면 `river_grab` 표준 양식 추가 → 자동측정 편향 검증 분석
 - [ ] 4대강 TMS(D-1)가 확보되면 42번을 전국 단위로 확장
 - [ ] 결과 해석 문서(연구계획서용) 작성
 
 ## 4. 변경 이력
+- 2026-11-05(오후): 연구 방향 검토 RESEARCH_REVIEW.md, 43_load_balance·44_wet_excess_load·45_facility_score, tools/assign_upstream·make_map, config(방류수 기준·평가 가중치·GIS 경로), core.io.tms_upstream_load
 - 2026-11-05: v3 최초 작성 — 표준 양식·매핑 엔진, 증분 수집, API 수집기 4종, 분석 22개(기본 4·중급 6·심화 9·연계 3), 작업안내서·자료요구서·README
