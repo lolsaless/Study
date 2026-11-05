@@ -116,8 +116,8 @@ def main():
     df["site_type"] = df["site"].map(site_type)
     df["sid"] = df["site"] + "#" + df["outlet"].astype(str)
     df["month"] = df["date"].dt.month
-    df["dow"] = df["date"].dt.dayofweek          # 0=월 … 6=일
-    df["doy"] = df["date"].dt.dayofyear
+    df["dow"] = df["date"].dt.day_of_week          # 0=월 … 6=일
+    df["doy"] = df["date"].dt.day_of_year
     df["ym"] = df["date"].dt.to_period("M").astype(str)
     hol = set(pd.to_datetime(C.HOLIDAYS))
     df["is_holiday"] = df["date"].isin(hol)

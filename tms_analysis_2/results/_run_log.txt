@@ -1,0 +1,73 @@
+
+===== 2026-11-05 09:58:49 01_preprocess.py OK 12s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/01_preprocess/summary.md
+
+===== 2026-11-05 09:59:01 02_data_quality.py OK 12s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/02_data_quality/summary.md
+
+===== 2026-11-05 09:59:17 03_descriptive_stats.py OK 16s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/03_descriptive_stats/summary.md
+
+===== 2026-11-05 09:59:26 04_flow_analysis.py OK 9s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/04_flow_analysis/summary.md
+
+===== 2026-11-05 09:59:35 05_compliance_margin.py OK 9s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/05_compliance_margin/summary.md
+
+===== 2026-11-05 10:01:41 06_seasonality_stl.py OK 126s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/06_seasonality_stl/summary.md
+
+===== 2026-11-05 10:02:10 07_weekday_holiday.py OK 29s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/07_weekday_holiday/summary.md
+
+===== 2026-11-05 10:02:25 08_trend_mannkendall.py OK 15s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/08_trend_mannkendall/summary.md
+
+===== 2026-11-05 10:02:53 09_changepoint.py OK 27s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/09_changepoint/summary.md
+
+===== 2026-11-05 10:04:44 10_anomaly_detection.py OK 111s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/10_anomaly_detection/summary.md
+
+===== 2026-11-05 10:05:03 11_param_correlation_cq.py OK 19s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/11_param_correlation_cq/summary.md
+
+===== 2026-11-05 10:05:15 12_cross_site_sync.py OK 13s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/12_cross_site_sync/summary.md
+
+===== 2026-11-05 10:05:36 13_typology_clustering.py OK 20s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/13_typology_clustering/summary.md
+
+===== 2026-11-05 10:06:17 14_shape_clustering.py OK 41s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/14_shape_clustering/summary.md
+
+===== 2026-11-05 10:06:38 15_autocorr_spectral.py OK 21s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/15_autocorr_spectral/summary.md
+
+===== 2026-11-05 10:06:46 16_load_contribution.py OK 8s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/16_load_contribution/summary.md
+
+===== 2026-11-05 10:06:56 17_multi_outlet.py OK 10s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/17_multi_outlet/summary.md
+
+===== 2026-11-05 10:08:12 18_extreme_value.py OK 77s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/18_extreme_value/summary.md
+
+===== 2026-11-05 10:08:54 19_lead_lag_granger.py OK 42s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/19_lead_lag_granger/summary.md
+
+===== 2026-11-05 10:08:56 21_merge_weather.py OK 2s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/21_merge_weather/summary.md
+
+===== 2026-11-05 10:09:00 22_rain_response.py OK 3s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/22_rain_response/summary.md
+
+===== 2026-11-05 10:09:05 23_temperature_threshold.py OK 5s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/23_temperature_threshold/summary.md
+
+===== 2026-11-05 10:09:09 20_build_digest.py OK 4s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results/00_DIGEST_for_Claude.md
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/results_for_claude.zip  (5.8 MB)
+
+===== 2026-11-05 10:09:11 build_dashboard.py OK 2s =====
+[완료] /Users/mac/Documents/GitHub/Study/tms_analysis_2/dashboard.html  (5.0 MB, 보고서 22개)
