@@ -164,3 +164,31 @@ def iter_series(df, vars, min_days=C.MIN_DAYS):
         for v in vars:
             if v in g and g[v].notna().sum() >= min_days:
                 yield b, stn, v, g[v]
+
+
+def tms_upstream_load(tms, sites, min_report=None):
+    """상류 TMS 사업장들의 일 부하 합(kg/일)·방류수량 합(m³/일).
+    보고한 사업장 비율이 min_report 이상인 날만 쓰고, 빠진 사업장 몫은 비례로 채운다(비율 추정).
+    반환: index=date, [TOC_load, TN_load, TP_load, SS_load, Q, 보고비율]"""
+    min_report = C.MIN_SITE_REPORT if min_report is None else min_report
+    t = tms[tms["site"].isin(sites)]
+    if t.empty:
+        return None
+    cols = [c for c in ["TOC_load", "TN_load", "TP_load", "SS_load", "Q"] if c in t]
+    n_all = t["site"].nunique()
+    g = t.groupby("date")
+    frac = g["site"].nunique() / n_all
+    out = g[cols].sum(min_count=1).div(frac, axis=0)
+    out = out.where(frac >= min_report)
+    out["보고비율"] = frac
+    out.index = pd.to_datetime(out.index)
+    return out.asfreq("D")
+
+
+def flow_zone(q):
+    """하천 유량 → 백분위 구간 이름(config.FLOW_ZONES)"""
+    p = q.rank(pct=True)
+    z = pd.Series(None, index=q.index, dtype=object)
+    for lo, hi, name in C.FLOW_ZONES:
+        z[(p >= lo) & (p < hi)] = name
+    return z

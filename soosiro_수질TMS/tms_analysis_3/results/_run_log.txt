@@ -227,3 +227,46 @@
 [완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_핵심결과.md
 [완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_DIGEST_for_Claude.md
 [완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results_for_claude.zip (2.5 MB)
+
+===== 2026-11-05 06:32:49 00_check_inputs.py OK 8s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_check_inputs/summary.md  (핵심 결과 1개, 상태: 완료)
+                     스크립트    상태
+       10_data_quality.py 실행 가능
+        11_descriptive.py 실행 가능
+           12_wq_grade.py 실행 가능
+      13_group_compare.py 실행 가능
+        20_seasonality.py 실행 가능
+              21_trend.py 실행 가능
+        22_diel_oxygen.py 실행 가능
+23_weekday_fingerprint.py 실행 가능
+   24_correlation_sync.py 실행 가능
+        25_changepoint.py 실행 가능
+     30_anomaly_events.py 실행 가능
+           31_typology.py 실행 가능
+       32_longitudinal.py 실행 가능
+       33_chla_drivers.py 실행 가능
+         34_bloom_risk.py 실행 가능
+      35_extreme_value.py 실행 가능
+    36_memory_spectral.py 실행 가능
+     37_forecast_skill.py 실행 가능
+ 38_network_redundancy.py 실행 가능
+       40_weather_link.py 실행 가능
+          41_flow_load.py 실행 가능
+           42_tms_link.py 실행 가능
+       43_load_balance.py 실행 가능
+    44_wet_excess_load.py 실행 가능
+     45_facility_score.py 실행 가능
+
+===== 2026-11-05 06:32:51 43_load_balance.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/43_load_balance/summary.md  (핵심 결과 11개, 상태: 완료)
+
+===== 2026-11-05 06:32:55 44_wet_excess_load.py OK 3s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/44_wet_excess_load/summary.md  (핵심 결과 7개, 상태: 완료)
+
+===== 2026-11-05 06:33:06 45_facility_score.py OK 11s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/45_facility_score/summary.md  (핵심 결과 5개, 상태: 완료)
+
+===== 2026-11-05 06:33:07 90_build_digest.py OK 1s =====
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_핵심결과.md
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results/00_DIGEST_for_Claude.md
+[완료] /home/user/Study/soosiro_수질TMS/tms_analysis_3/results_for_claude.zip (2.7 MB)

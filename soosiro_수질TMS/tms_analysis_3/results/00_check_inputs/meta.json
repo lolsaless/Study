@@ -1,6 +1,6 @@
 {
  "script": "00_check_inputs.py",
- "run_at": "2026-11-05 06:01",
+ "run_at": "2026-11-05 06:32",
  "level": "준비",
  "status": "완료",
  "config": {

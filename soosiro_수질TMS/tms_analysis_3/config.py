@@ -21,8 +21,15 @@ KEYS_FILE = DATA_DIR / "api_keys.env"   # API 인증키(git 제외). 양식: col
 NIER_XLSX_DIR = RAW_DIR / "nier_auto_xlsx"          # 물환경정보시스템 '시간자료' xlsx (연도/권역/파일)
 NIER_DAILY_V2_DIR = RAW_DIR / "nier_auto_daily_v2"  # 기존 merge_water_day.py 산출물(대체 입력)
 
-# 다른 프로젝트 자료(선택) — 수질TMS(방류수) 정제자료. 없으면 42번은 '자료 대기'
+# 다른 프로젝트 자료(선택) — 수질TMS(방류수) 정제자료. 없으면 42·43·45번은 '자료 대기'
 TMS_CLEAN_PKL = BASE_DIR.parent / "tms_analysis_2" / "work" / "tms_clean.pkl"
+TMS_SITE_COORDS = BASE_DIR.parent / "tms_analysis_2" / "data" / "site_coords.csv"     # site, lat, lon (지도·유역 배정)
+TMS_SITE_REGION = BASE_DIR.parent / "tms_analysis_2" / "data" / "site_region.csv"     # site, region, std_* (방류수 기준 지역)
+SITE_FACILITY_CSV = META_DIR / "site_facility.csv"   # (선택) site, capacity_m3d, process, start_date … — 45번 원인 분석
+
+# GIS(선택) — 측정소별 상류 유역 구역 배정(tools/assign_upstream.py)
+GIS_DIR = RAW_DIR / "gis"                             # 표준유역·중권역 경계(.geojson 또는 .shp)
+STATION_CATCHMENT_CSV = META_DIR / "station_catchment.csv"   # station, catchment_codes(; 구분) — 측정소 상류 구역 목록
 
 # ── 측정 항목 ────────────────────────────────────────────
 CORE_VARS = ["WT", "pH", "EC", "DO", "Turb", "TOC", "TN", "TP", "Chl_a"]
@@ -75,6 +82,24 @@ WET_DAY_MM = 1.0        # 강수일
 EVENT_MM = 20.0         # 강우 사건(당일 또는 2일 누적)
 DRY_PRIOR_DAYS = 3      # 건기일 = 당일 포함 직전 n일 강수 < WET_DAY_MM
 API_K = 0.9             # 선행강우지수 감쇠계수
+
+# ── 부하 수지·강우 초과 부하(43·44) ─────────────────────
+FLOW_ZONES = [(0, 0.30, "저유량"), (0.30, 0.90, "중간"), (0.90, 1.01, "고유량")]   # 하천 유량 백분위 구간
+MIN_SITE_REPORT = 0.8   # 상류 사업장 중 이 비율 이상이 보고한 날만 TMS 부하 합계를 쓴다
+EFFLUENT_DOMINATED = 0.5   # 저유량 시 방류수량/하천유량 ≥ 이 값 → '처리수 지배 하천'
+
+# ── 방류수 수질기준(공공하수처리시설 500 m³/일 이상, mg/L) — 45번 ──────────
+# ※ 반드시 현행 「하수도법 시행규칙」 별표로 확인. 지역은 TMS_SITE_REGION(site,region)로 지정, 없으면 DEFAULT_REGION
+DISCHARGE_STANDARDS = {
+    "I":   {"TOC": 15, "SS": 10, "TN": 20, "TP": 0.2},
+    "II":  {"TOC": 15, "SS": 10, "TN": 20, "TP": 0.3},
+    "III": {"TOC": 25, "SS": 10, "TN": 20, "TP": 0.5},
+    "IV":  {"TOC": 25, "SS": 10, "TN": 20, "TP": 2.0},
+}
+DEFAULT_REGION = "I"
+FACILITY_TYPES = ["하수"]          # 45번 평가 대상 TMS 유형
+# 평가 영역 가중치(합 1). 바꾸면 점수·순위가 바뀌므로 정책 협의 후 확정
+FACILITY_SCORE_WEIGHTS = {"기준 여유": 0.35, "안정성": 0.25, "강우 대응": 0.20, "자료 관리": 0.20}
 
 # ── 공휴일(요일 분석에서 제외) ────────────────────────────
 HOLIDAYS = [

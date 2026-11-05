@@ -26,7 +26,7 @@
 ```
 tms_analysis_3/
 ├─ 작업안내서.md  CLAUDE.md          ← 작업 전 먼저 읽기(사람·Claude)
-├─ 자료요구서.md  PROJECT_STATUS.md  README.md
+├─ 자료요구서.md  PROJECT_STATUS.md  README.md  RESEARCH_REVIEW.md(연구 방향 검토)
 ├─ config.py                         경로·항목·기준값(생활환경기준)·임계값
 ├─ run_all.py                        일괄 실행(단계·번호 선택)
 ├─ 00_check_inputs.py                입력 점검(표준 양식 검사, 실행 가능 분석 표)
@@ -43,7 +43,8 @@ tms_analysis_3/
 │   ├─ mapper.py   매핑 엔진(JSON → 표준 양식)
 │   └─ mappings/   *.json (nier_daily_v2, kma_asos_daily, hrfco_*, obs_stations_*, nier_api_hourly, _TEMPLATE)
 ├─ collectors/     API 수집기(collect_nier_api, collect_kma_asos_daily, collect_hrfco, collect_wamis_flow) + api_keys.env.example
-├─ tools/          peek.py(파일 구조 보기) · make_mapping.py(매핑 초안) · link_stations.py(좌표로 연결) · _seed_stations.py
+├─ tools/          peek.py(파일 구조 보기) · make_mapping.py(매핑 초안) · link_stations.py(좌표로 연결)
+│                  assign_upstream.py(유역 경계로 상류 사업장 배정) · make_map.py(연결 지도) · _seed_stations.py
 ├─ templates/      station_info_request.csv(측정소 좌표 요청 양식)
 ├─ data/
 │   ├─ raw/        원자료(수정 금지)
@@ -87,7 +88,8 @@ python run_all.py 33 34       # 번호만
    30 이상사건 ──► work/regional_event_days.csv (강우일 대용)
    31 유형화  ──► work/station_types.csv
    core/events.py ──► 23·30·40·42 (하천 자료로 정의한 강우 사건일·건기일)
-   tms_analysis_2/work/tms_clean.pkl ──► 42
+   tms_analysis_2/work/tms_clean.pkl ──► 42 · 43 · 44 · 45
+   43 부하 수지 ──► work/effluent_share.csv ──► 45 (처리수 지배 하천 가중)
                                      ▼
                      results/<번호>/summary.md · findings.json · meta.json
                                      ▼
@@ -147,6 +149,11 @@ python run_all.py 33 34       # 번호만
 | 40 | 기상 연계 | weather_daily + stations.weather_stn | 강우 사건 배율, **분포시차(비 온 뒤 며칠째)**, **기온→수온 열 민감도**, 하천 정의 사건일 검증 | ● |
 | 41 | 유량·부하 | flow_daily + stations.flow_obscd | **C–Q 유형(점/비점)**, 부하량, **고유량 10% 날 부하 비중**, **부하지속곡선** | ● |
 | 42 | TMS × 하천 | tms_analysis_2 tms_clean.pkl + stations.upstream_tms | 요일 지문 일치, 시차 상관, **건기·강우기 TMS 기여율** | v2 24 확장 |
+| 43 | 부하 수지(연구 방향 1) | 유량 + 상류 TMS 연결 | 하천 부하 − 방류 TMS 부하 = **미계측 부하**(유황별), **처리수 지배 하천**, 정합성 점검 | ● |
+| 44 | 강우 초과 부하(방향 2) | 기상 연결(+유량) | **희석 예상 대비** 초과, 강우 초과 부하, 사건 유형(토사형 비점·유기물형 월류), 같은 날 방류 TMS 변화 | ● |
+| 45 | 처리시설 평가(방향 3) | 방류 TMS(+site_region, site_facility, 43 결과) | 4개 영역 점수·등급, 연도 안정성, 기준 지역 민감도, 원인 분석, **지원 우선순위·개선 인센티브** | ● |
+
+연구 방향 1~3의 검토와 결과는 [`RESEARCH_REVIEW.md`](RESEARCH_REVIEW.md).
 
 ### 취합·도구
 
@@ -157,6 +164,8 @@ python run_all.py 33 34       # 번호만
 | `tools/make_mapping.py <파일> --target <양식> [--name 이름]` | 매핑 JSON 초안 자동 생성 |
 | `ingest/mapper.py <매핑.json> [--dry-run] [--mode replace]` | 매핑 실행 |
 | `tools/link_stations.py [--apply]` | 측정소 좌표로 가까운 기상·유량 지점 연결 |
+| `tools/assign_upstream.py --code-col <열> [--auto/--apply]` | 유역 경계(GeoJSON)로 측정소 상류 구역의 TMS 사업장 자동 배정 |
+| `tools/make_map.py` | 측정소·TMS·관측소·연결선 지도 → `results/map/link_map.html` |
 | `collectors/collect_*.py --test` | API 응답 확인 후 수집(자료요구서 B·C) |
 | `python -m core.schema [양식]` | 표준 양식 설명 |
 
