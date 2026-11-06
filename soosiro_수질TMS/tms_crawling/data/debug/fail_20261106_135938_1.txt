@@ -1,0 +1,8 @@
+작업: 2024Q1 화면 설정
+오류: TimeoutException: Message: 조회 화면 로딩 대기 시간 초과(45초)
+브라우저 모드: 헤드리스(eager)
+차단한 외부 서버: []
+[브라우저 콘솔]
+WARNING: https://www.soosiro.or.kr/open/web/daily?pMENU_NO=419 5 The key "target-densitydpi" is not supported.
+SEVERE: https://www.soosiro.or.kr/open/com/web/css/%20https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900|Noto+Sans+KR:100,300,400,500,700,900|Roboto:100,300,400,500,700,900
+[응답 없는 요청]

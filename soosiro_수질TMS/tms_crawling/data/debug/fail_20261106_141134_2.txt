@@ -1,0 +1,10 @@
+작업: 2024Q4 [폐쇄]홍원제지(평택)
+오류: PageAlert: 예상 밖의 알림창: 사업장을 선택하여 주십시오.
+브라우저 모드: 헤드리스(eager)
+차단한 외부 서버: []
+URL: https://www.soosiro.or.kr/open/web/daily?pMENU_NO=419
+[브라우저 콘솔]
+WARNING: https://www.soosiro.or.kr/open/web/daily?pMENU_NO=419 5 The key "target-densitydpi" is not supported.
+SEVERE: https://www.soosiro.or.kr/open/com/web/css/%20https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900|Noto+Sans+KR:100,300,400,500,700,900|Roboto:100,300,400,500,700,900
+SEVERE: https://www.soosiro.or.kr/open/com/web/css/%20https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900|Noto+Sans+KR:100,300,400,500,700,900|Roboto:100,300,400,500,700,900
+[응답 없는 요청]
