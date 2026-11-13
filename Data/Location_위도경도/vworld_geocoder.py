@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-주소 → 위도·경도 변환기 v2 (브이월드 지오코더 + 주소·장소 검색 + 지도 표시)
+주소 → 위도·경도 변환기 v3 (브이월드 지오코더 + 주소·장소 검색 + 지도 표시)
+
+v3 수정 요약
+  - [핵심] CSV를 읽을 때 "…수택동 97-10" 같은 주소가 날짜(10/1/97)로 바뀌던 문제 수정
+    (엑셀 라이브러리 SheetJS가 CSV 글자를 날짜·숫자로 추측해 바꿨고, 그 값이 변환과 '원본 자동 저장'에까지 쓰였음)
+    → CSV는 직접 읽어 모든 칸을 글자 그대로 유지하고, 엑셀 파일은 칸 종류를 확인해 날짜·숫자로 저장된 주소를 따로 알려 준다.
+  - 주소 보정 조회: 괄호 제거 → 지목(전·답 등) 제거 → 화성시 신설 구(만세구 등) 제거 순으로 다시 시도
+  - 지번/도로명을 판별해 알맞은 유형부터 조회, 결과의 시·군이 입력과 다르면 "확인필요" 표시
+  - 네트워크 없이 주소 정리 규칙만 점검:  python vworld_geocoder.py --selftest
 
 사용법
   1) 이 파일과 같은 폴더의 .env 파일에 인증키를 적는다.
@@ -27,9 +35,11 @@
 import csv
 import json
 import os
+import re
 import secrets
 import sys
 import threading
+import unicodedata
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -190,17 +200,99 @@ def vworld_geocode(address: str, addr_type: str) -> dict:
     return out
 
 
+SIDO_SHORT = {
+    "경기": "경기도", "강원": "강원특별자치도", "서울": "서울특별시", "인천": "인천광역시",
+    "부산": "부산광역시", "대구": "대구광역시", "광주": "광주광역시", "대전": "대전광역시",
+    "울산": "울산광역시", "세종": "세종특별자치시", "충북": "충청북도", "충남": "충청남도",
+    "전북": "전북특별자치도", "전남": "전라남도", "경북": "경상북도", "경남": "경상남도",
+    "제주": "제주특별자치도",
+}
+JIMOK = "전|답|대|임야|잡종지|공장용지|도로|하천|구거|유지|과수원|목장용지|창고용지|학교용지|주차장|종교용지|체육용지|잡종"
+NEW_GU_RE = re.compile(r"(화성시)\s*(?:만세구|효행구|병점구|동탄구)")  # 2026년 신설 구: 지오코더 DB에 없을 수 있음
+
+
+def normalize_address(addr: str) -> str:
+    """전각 문자·유니코드 조합 차이·여분 공백을 정리하고 시도 약칭을 풀어 쓴다."""
+    a = unicodedata.normalize("NFKC", str(addr or "")).replace(" ", " ")
+    a = re.sub(r"\s+", " ", a).strip()
+    first, _, rest = a.partition(" ")
+    if first in SIDO_SHORT:
+        a = SIDO_SHORT[first] + (" " + rest if rest else "")
+    return a
+
+
+def strip_paren(a: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"\s*\([^)]*\)", "", a)).strip()
+
+
+def address_variants(addr: str) -> list:
+    """원래 주소 → 점점 단순하게 만든 주소 순서로 최대 6개 (중복 제거)."""
+    a = normalize_address(addr)
+    b = strip_paren(a)                                                   # (수택동)·(건물명) 제거
+    c = re.sub(r"(\d+(?:-\d+)?)\s*(?:%s)\s*$" % JIMOK, r"\1", b)         # '332 전' → '332'
+    out = []
+    for base in (a, b, c):
+        for v in (base, NEW_GU_RE.sub(r"\1", base)):
+            v = v.strip()
+            if v and v not in out:
+                out.append(v)
+    return out[:6]
+
+
+def looks_road(a: str) -> bool:
+    """도로명 주소(…로/길 + 건물번호)처럼 보이면 True. 지번(…동/리 + 번지)이면 False."""
+    return bool(re.search(r"[로길]\s*\d+(?:-\d+)?\s*$", strip_paren(a)))
+
+
+def sigungu_of(a: str) -> str:
+    m = re.search(r"(?:도|특별시|광역시|특별자치시|특별자치도)\s+([가-힣]+?[시군])(?=\s|$)", a)
+    if m:
+        return m.group(1)
+    m = re.match(r"^([가-힣]+?[시군])(?=\s)", a)
+    return m.group(1) if m else ""
+
+
 def geocode(address: str, mode: str) -> dict:
     if not API_KEY:
         return {"ok": False, "apiError": True, "error": ".env 에 VWORLD_API_KEY 가 설정되지 않았습니다."}
-    if mode in ("road", "parcel"):
-        return vworld_geocode(address, mode)
-    r = vworld_geocode(address, "road")  # auto: 도로명 → 지번 순서로 시도
-    if not r["ok"] and not r.get("apiError"):
-        r2 = vworld_geocode(address, "parcel")
-        if r2["ok"] or r2.get("apiError"):
-            return r2
-    return r
+    variants = address_variants(address)
+    if not variants:
+        return {"ok": False, "error": "주소 없음"}
+    for k, v in enumerate(variants):
+        if mode in ("road", "parcel"):
+            order = [mode]
+        else:
+            order = ["road", "parcel"] if looks_road(v) else ["parcel", "road"]
+        for t in order:
+            r = vworld_geocode(v, t)
+            if r.get("apiError"):
+                return r
+            if r["ok"]:
+                r = dict(r)
+                r["query"] = v
+                r["variant"] = k > 0                      # 보정한 주소로 찾았는지
+                want, got = sigungu_of(variants[0]), r.get("refined", "")
+                if want and got and want not in got:      # 엉뚱한 지역이 잡힌 경우 경고
+                    r["warn"] = f"시·군 불일치({want}≠{sigungu_of(got) or got[:12]})"
+                return r
+    return {"ok": False, "error": f"검색 결과 없음 (주소 변형 {len(variants)}개 시도)"}
+
+
+def selftest() -> None:
+    """네트워크 없이 주소 정리 규칙만 확인한다:  python vworld_geocoder.py --selftest"""
+    cases = {
+        "경기 구리시 수택동 97-10": ["경기도 구리시 수택동 97-10"],
+        "경기도 고양시 일산동구 통일로1267번길 100-53 (지영동)": ["경기도 고양시 일산동구 통일로1267번길 100-53"],
+        "경기도 광주시 오포읍 문형리 332 전": ["경기도 광주시 오포읍 문형리 332"],
+        "경기도 화성시 병점구 태안로 263 (송산동)": ["경기도 화성시 태안로 263"],
+    }
+    for src, must in cases.items():
+        got = address_variants(src)
+        for m in must:
+            assert m in got, (src, m, got)
+    assert looks_road("경기도 광주시 청석로 85 (양벌동)") and not looks_road("경기도 구리시 수택동 97-10")
+    assert sigungu_of("경기도 구리시 수택동 97-10") == "구리시" and sigungu_of("경기도 광주시 도척면") == "광주시"
+    print("자체 점검 통과")
 
 
 # ------------------------------------------------------------------ 주소·장소 검색
@@ -535,6 +627,7 @@ HTML = r'''<!DOCTYPE html>
   tbody tr:hover { background: var(--s2); }
   tbody tr.sel { background: var(--s3); box-shadow: inset 2px 0 0 var(--ink3); }
   tr.ok .st { color: var(--ok); }
+  tr.warn .st { color: #e5a50a; }
   tr.fail .st { color: var(--danger); }
   tr.busyrow .st { color: var(--ink3); }
   td.act { width: 1%; }
@@ -689,7 +782,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 
 let raw = [], headers = [], rows = [], orig = [], results = [], markers = [];
 let selected = -1, dirty = false, running = false, stopFlag = false, kakaoOn = false;
-let wb = null, sheetName = '', rawSrc = [], sheetC0 = 0, sheetEndC = 0;
+let wb = null, sheetName = '', rawSrc = [], rawKind = [], kinds = [], sheetC0 = 0, sheetEndC = 0;
 let fileHandle = null, fileName = '', fileKind = '';
 let saving = false, saveAgain = false, saveTimer = null, lastSaveAt = 0;
 const colIdx = () => +$('col').value;
@@ -734,16 +827,16 @@ $('file').addEventListener('change', e => { const f = e.target.files[0]; if (f) 
 
 $('paste').addEventListener('input', () => {
   $('file').value = '';
-  wb = null; fileHandle = null; fileName = ''; fileKind = ''; rawSrc = [];
+  wb = null; fileHandle = null; fileName = ''; fileKind = ''; rawSrc = []; rawKind = [];
   raw = $('paste').value.split(/\r?\n/).filter(l => l.trim() !== '').map(l => l.split('\t'));
   $('hasHeader').checked = false;   // 붙여넣기는 기본적으로 머리글 없음으로 간주
   afterLoad();
 });
 $('hasHeader').addEventListener('change', afterLoad);
-$('col').addEventListener('change', () => { captureOrig(); resetResults(); renderTable(); });
+$('col').addEventListener('change', () => { captureOrig(); resetResults(); renderTable(); checkAddresses(); });
 
 function afterLoad() {
-  buildTable(); resetResults(); renderTable(); setFilter('all'); updateSaveLabel();
+  buildTable(); resetResults(); renderTable(); setFilter('all'); updateSaveLabel(); checkAddresses();
   dirty = false;
   $('run').disabled = rows.length === 0;
   $('summary').textContent = rows.length ? `· ${rows.length}건 대기` : '';
@@ -752,12 +845,14 @@ function afterLoad() {
 function captureOrig() { const c = colIdx(); orig = rows.map(r => r[c]); }
 
 function buildTable() {
-  if (!raw.length) { headers = []; rows = []; orig = []; $('col').innerHTML = ''; return; }
+  if (!raw.length) { headers = []; rows = []; orig = []; kinds = []; $('col').innerHTML = ''; return; }
   const n = raw.reduce((m, r) => Math.max(m, r.length), 0);
   const norm = raw.map(r => Array.from({ length: n }, (_, i) => String(r[i] ?? '').trim()));
   const hh = $('hasHeader').checked;
   headers = hh ? norm[0].map((h, i) => h || ('열 ' + (i + 1))) : norm[0].map((_, i) => '열 ' + (i + 1));
   rows = hh ? norm.slice(1) : norm;
+  const nk = raw.map((r, k) => Array.from({ length: n }, (_, i) => (rawKind[k] && rawKind[k][i]) || 's'));
+  kinds = hh ? nk.slice(1) : nk;   // 칸 종류: s=글자, n=숫자·날짜, z=빈칸
   $('col').innerHTML = headers.map((h, i) => `<option value="${i}">${esc(h)}</option>`).join('');
   let idx = headers.findIndex(h => /주소|소재지|address/i.test(h));
   $('col').value = idx < 0 ? 0 : idx;
@@ -775,11 +870,30 @@ function resetResults() {
 }
 
 const isEdited = i => rows[i][colIdx()] !== orig[i];
+
+/* 주소 칸이 글자가 아닌 숫자·날짜로 저장돼 있는지 (엑셀이 '97-10' 등을 날짜로 바꾼 경우) */
+function badKind(i) { return !isEdited(i) && !['s', 'z'].includes((kinds[i] && kinds[i][colIdx()]) || 's'); }
+function looksBroken(a) {
+  a = String(a || '').trim();
+  return a !== '' && (!/[가-힣]/.test(a) || /^\d{1,4}[-\/.]\d{1,4}([-\/.]\d{1,4})?$/.test(a));
+}
+const BROKEN_MSG = '주소 칸이 숫자·날짜로 저장되어 있음(원본 확인)';
+function checkAddresses() {
+  const c = colIdx(), bad = [], w = $('warn');
+  rows.forEach((r, i) => { if (looksBroken(r[c]) || badKind(i)) bad.push(i + 1); });
+  if (bad.length) showWarn(`주소 칸이 날짜·숫자로 바뀐 것으로 보이는 행이 ${bad.length}건 있습니다 (행 번호: ${bad.slice(0, 15).join(', ')}${bad.length > 15 ? ' …' : ''}). 원본 파일의 해당 칸을 확인하세요.`);
+  else if (w.textContent.startsWith('주소 칸이')) w.hidden = true;
+}
 function statusText(i) {
   const r = results[i];
   if (!r) return '';
   if (r.pending) return '조회 중…';
-  if (r.ok) return isEdited(i) ? (r.via === 'search' ? '성공 · 검색 적용' : '성공 · 수정 후 조회') : '성공';
+  if (r.ok) {
+    let t = isEdited(i) ? (r.via === 'search' ? '성공 · 검색 적용' : '성공 · 수정 후 조회') : '성공';
+    if (r.variant) t += ' · 주소 보정 조회';
+    if (r.warn) t += ' · 확인필요(' + r.warn + ')';
+    return t;
+  }
   return r.error || '실패';
 }
 
@@ -804,8 +918,8 @@ function updateRow(i) {
   tr.querySelector('.lat').textContent = r && r.ok ? r.lat.toFixed(6) : '';
   tr.querySelector('.lon').textContent = r && r.ok ? r.lon.toFixed(6) : '';
   const st = tr.querySelector('.st'); st.textContent = statusText(i); st.title = st.textContent;
-  tr.classList.remove('ok', 'fail', 'busyrow');
-  if (r) tr.classList.add(r.pending ? 'busyrow' : (r.ok ? 'ok' : 'fail'));
+  tr.classList.remove('ok', 'fail', 'busyrow', 'warn');
+  if (r) tr.classList.add(...(r.pending ? ['busyrow'] : r.ok ? (r.warn ? ['ok', 'warn'] : ['ok']) : ['fail']));
   tr.classList.toggle('edited', isEdited(i));
 }
 
@@ -827,7 +941,7 @@ function setMarker(i) {
   if (!r || !r.ok) return;
   const addr = rows[i][colIdx()];
   const m = L.circleMarker([r.lat, r.lon], i === selected ? MS.sel : MS.normal);
-  m.bindPopup(`<b>#${i + 1}</b><br>${esc(addr)}<br><span style="color:#8a8f98">${esc(r.refined || '')}</span><br><span class="mono">${r.lat.toFixed(6)}, ${r.lon.toFixed(6)}</span>`);
+  m.bindPopup(`<b>#${i + 1}</b><br>${esc(addr)}<br><span style="color:#8a8f98">${esc(r.refined || '')}</span>${r.variant ? '<br><span style="color:#8a8f98">조회에 쓴 주소: ' + esc(r.query) + '</span>' : ''}<br><span class="mono">${r.lat.toFixed(6)}, ${r.lon.toFixed(6)}</span>`);
   m.on('click', () => selectRow(i, false));
   m.addTo(group);
   markers[i] = m;
@@ -878,6 +992,7 @@ async function fetchGeo(addr, type) {
 async function geocodeRow(i) {
   const addr = String(rows[i][colIdx()] ?? '').trim();
   if (!addr) { results[i] = { ok: false, error: '주소 없음' }; setMarker(i); updateRow(i); updateSummary(); return; }
+  if (badKind(i)) { results[i] = { ok: false, error: BROKEN_MSG }; setMarker(i); updateRow(i); updateSummary(); return; }
   results[i] = { pending: true }; updateRow(i);
   const r = await fetchGeo(addr, $('atype').value);
   r.via = 'api';
@@ -909,6 +1024,7 @@ $('run').addEventListener('click', async () => {
       const addr = String(rows[i][col] ?? '').trim();
       let r;
       if (!addr) r = { ok: false, error: '주소 없음' };
+      else if (badKind(i)) r = { ok: false, error: BROKEN_MSG };
       else {
         if (!cache.has(addr)) cache.set(addr, fetchGeo(addr, type));
         r = Object.assign({}, await cache.get(addr));
@@ -1022,7 +1138,9 @@ function buildAoa(forOriginal = false) {
     out.push(line);
   });
   return out;
-}$('dlx').addEventListener('click', () => {
+}
+
+$('dlx').addEventListener('click', () => {
   const ws = XLSX.utils.aoa_to_sheet(buildAoa());
   const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, '변환결과');
   XLSX.writeFile(wb, 'geocode_result.xlsx');
@@ -1037,25 +1155,59 @@ $('dlc').addEventListener('click', () => {
 });
 
 /* ---------- 파일 열기 · 원본 자동 저장 ---------- */
+/* RFC4180 방식 CSV 읽기: 따옴표·쉼표·줄바꿈 처리, 값은 전부 글자로 유지 */
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const first = text.split(/\r?\n/, 1)[0];
+  const cnt = ch => first.split(ch).length;
+  const delim = cnt('\t') > cnt(',') ? '\t' : (cnt(';') > cnt(',') ? ';' : ',');
+  const out = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+      else cur += ch;
+    } else if (ch === '"' && cur === '') q = true;
+    else if (ch === delim) { row.push(cur); cur = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cur); cur = ''; out.push(row); row = []; }
+    else cur += ch;
+  }
+  if (cur !== '' || row.length) { row.push(cur); out.push(row); }
+  return out;
+}
+
 async function loadFile(f, handle) {
   try {
     const buf = await f.arrayBuffer();
-    const isCsv = /\.csv$/i.test(f.name);
+    const isCsv = /\.(csv|txt)$/i.test(f.name);
+    raw = []; rawSrc = []; rawKind = [];
     if (isCsv) {
+      // CSV 는 SheetJS 를 거치지 않고 직접 읽어 모든 칸을 '글자 그대로' 유지한다
+      // (SheetJS 는 "…수택동 97-10" 을 날짜 10/1/97 로 바꿔 버린다)
       let text;
       try { text = new TextDecoder('utf-8', { fatal: true }).decode(buf); }
       catch (_) { text = new TextDecoder('euc-kr').decode(buf); }   // CP949 CSV 대응
-      wb = XLSX.read(text, { type: 'string' });
+      wb = null; sheetName = ''; sheetC0 = 0; sheetEndC = 0;
+      parseCSV(text).forEach((r, k) => {
+        if (r.some(c => String(c).trim() !== '')) { raw.push(r); rawSrc.push(k); rawKind.push(r.map(() => 's')); }
+      });
     } else {
       wb = XLSX.read(buf, { type: 'array' });
+      sheetName = wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const rng = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']) : { s: { r: 0, c: 0 }, e: { r: 0, c: 0 } };
+      sheetC0 = rng.s.c; sheetEndC = rng.e.c;
+      for (let rr = rng.s.r; rr <= rng.e.r; rr++) {
+        const line = [], kind = [];
+        for (let cc = rng.s.c; cc <= rng.e.c; cc++) {
+          const cell = ws[XLSX.utils.encode_cell({ r: rr, c: cc })];
+          if (!cell) { line.push(''); kind.push('z'); continue; }
+          line.push(cell.t === 's' ? String(cell.v) : String(cell.w ?? cell.v ?? ''));
+          kind.push(cell.t);   // s=글자, n=숫자(날짜 포함), b=참거짓, e=오류
+        }
+        if (line.some(c => String(c).trim() !== '')) { raw.push(line); rawSrc.push(rr); rawKind.push(kind); }
+      }
     }
-    sheetName = wb.SheetNames[0];
-    const ws = wb.Sheets[sheetName];
-    const rng = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']) : { s: { r: 0, c: 0 }, e: { r: 0, c: 0 } };
-    sheetC0 = rng.s.c; sheetEndC = rng.e.c;
-    const all = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false, blankrows: true });
-    raw = []; rawSrc = [];
-    all.forEach((r, k) => { if (r.some(c => String(c).trim() !== '')) { raw.push(r); rawSrc.push(rng.s.r + k); } });
     fileName = f.name;
     fileHandle = handle || null;
     fileKind = fileHandle ? (isCsv ? 'csv' : 'xlsx') : '';
@@ -1235,6 +1387,9 @@ $('quit').addEventListener('click', async () => {
 
 def main():
     global SERVER
+    if "--selftest" in sys.argv:
+        selftest()
+        return
     if not API_KEY:
         print("[경고] VWORLD_API_KEY 가 비어 있습니다. .env 파일에 인증키를 입력하세요. (화면은 열리지만 변환은 되지 않습니다)")
     try:
