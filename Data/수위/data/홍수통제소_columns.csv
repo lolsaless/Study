@@ -1,0 +1,10 @@
+﻿열,설명,단위
+obscd,수위 관측소 코드(wlobscd),
+obs_name,관측소명(제원 obsnm),
+date,관측일,YYYY-MM-DD
+wl_m,일 수위(API wl),m
+flow_cms,일 유량(API fw). 수위만 재는 관측소는 빈칸 또는 0,m³/s
+stn,우량 관측소 = 'HR' + rfobscd (연구 weather_daily 형식),
+stn_name,관측소명,
+rain_mm,일 강수량(API rf),mm
+source,자료 출처 HRFCO(한강홍수통제소 실시간 API),

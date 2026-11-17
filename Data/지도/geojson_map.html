@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>GeoJSON 지도 뷰어</title>
+<style>
+  :root { --line:#d0d4da; --accent:#1a5fb4; --warn:#fff3b0; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:13px/1.4 "Malgun Gothic","Apple SD Gothic Neo",sans-serif; color:#222; display:flex; flex-direction:column; height:100vh; }
+  header { display:flex; gap:8px; align-items:center; padding:6px 10px; border-bottom:1px solid var(--line); background:#f4f6f8; flex-wrap:wrap; }
+  button { padding:4px 12px; border:1px solid #9aa3ad; background:#fff; border-radius:4px; cursor:pointer; font:inherit; }
+  button:hover { background:#eaf1fb; }
+  #info { color:#444; }
+  #warn { background:var(--warn); padding:2px 8px; border-radius:4px; display:none; }
+  main { flex:1; display:flex; min-height:0; }
+  #mapwrap { flex:1; position:relative; min-width:0; background:#fbfbfb; }
+  canvas { position:absolute; inset:0; width:100%; height:100%; cursor:grab; }
+  canvas.drag { cursor:grabbing; }
+  #drop { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#777; font-size:16px; pointer-events:none; text-align:center; }
+  #coord { position:absolute; left:8px; bottom:6px; background:rgba(255,255,255,.85); padding:1px 6px; border-radius:3px; font-size:12px; }
+  #zoom { position:absolute; right:10px; top:10px; display:flex; flex-direction:column; gap:4px; }
+  aside { width:380px; border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+  #q { margin:6px; padding:4px 6px; border:1px solid #9aa3ad; border-radius:4px; font:inherit; }
+  #sel { margin:0 6px 6px; padding:6px; background:#fff7e6; border:1px solid #f0c36d; border-radius:4px; display:none; word-break:break-all; }
+  #sel div { margin:1px 0; }
+  #tblwrap { flex:1; overflow:auto; border-top:1px solid var(--line); }
+  table { border-collapse:collapse; width:100%; }
+  th,td { border-bottom:1px solid #eee; padding:3px 6px; text-align:left; white-space:nowrap; }
+  th { position:sticky; top:0; background:#f4f6f8; }
+  tr.on td { background:#ffe3b0; }
+  tbody tr { cursor:pointer; }
+  tbody tr:hover td { background:#eaf1fb; }
+  #cnt { margin:0 6px 4px; color:#555; }
+</style>
+</head>
+<body>
+<header>
+  <button id="open">GeoJSON 열기</button>
+  <input type="file" id="file" accept=".geojson,.json" hidden>
+  <button id="fit">전체 보기</button>
+  <span id="info">파일을 열거나 이 창에 끌어다 놓으세요.</span>
+  <span id="warn"></span>
+</header>
+<main>
+  <div id="mapwrap">
+    <canvas id="cv"></canvas>
+    <div id="drop">.geojson 파일을 여기에 끌어다 놓거나<br>[GeoJSON 열기]를 누르세요</div>
+    <div id="zoom"><button id="zin">＋</button><button id="zout">－</button></div>
+    <div id="coord"></div><div id="zoomms" style="position:absolute;right:10px;bottom:6px;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:3px;font-size:12px"></div>
+  </div>
+  <aside>
+    <input id="q" placeholder="속성값 검색 (지도·표에 함께 적용)">
+    <div id="sel"></div>
+    <div id="cnt"></div>
+    <div id="tblwrap"><table id="tbl"></table></div>
+  </aside>
+</main>
+
+<script>
+"use strict";
+// ── 바꿀 수 있는 값 ───────────────────────────────
+const FILL = "rgba(120,170,230,0.45)";
+const STROKE = "#1a5fb4";
+const HILITE_FILL = "rgba(255,140,0,0.55)";
+const HILITE_STROKE = "#c25e00";
+const TABLE_MAX_ROWS = 1000;   // 표에 보여줄 최대 행 (지도는 전부 그림)
+const TINY_PX = 4;             // 화면에서 이 크기(px)보다 작은 도형은 작은 네모 하나로 단순화 (속도용)
+// ──────────────────────────────────────────────────
+
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+let feats = [];          // {props, kind, rings:[Float64Array], bbox:[x0,y0,x1,y1], show}
+let geographic = true;   // 좌표가 경도·위도(도)인지
+let kx = 1;              // 경도 보정(cos 위도)
+let scale = 1, ox = 0, oy = 0;
+let selected = -1;
+let cols = [];
+let W = 0, H = 0, dpr = 1;
+
+const $ = id => document.getElementById(id);
+
+// ── 파일 열기 ──
+$("open").onclick = () => $("file").click();
+$("file").onchange = e => { if (e.target.files[0]) loadFile(e.target.files[0]); };
+window.addEventListener("dragover", e => e.preventDefault());
+window.addEventListener("drop", e => { e.preventDefault(); if (e.dataTransfer.files[0]) loadFile(e.dataTransfer.files[0]); });
+
+async function loadFile(file) {
+  setInfo("읽는 중… " + file.name);
+  await new Promise(r => setTimeout(r, 20));
+  try {
+    const t0 = performance.now();
+    const gj = JSON.parse(await file.text());
+    build(gj);
+    setInfo(`${file.name} — 도형 ${feats.length.toLocaleString()}개 (읽기 ${((performance.now()-t0)/1000).toFixed(1)}초)`);
+  } catch (err) {
+    setInfo("읽기 실패: " + err.message);
+  }
+}
+function setInfo(t) { $("info").textContent = t; }
+
+// ── GeoJSON → 내부 구조 ──
+function build(gj) {
+  const list = gj.type === "FeatureCollection" ? gj.features
+             : gj.type === "Feature" ? [gj]
+             : [{ type:"Feature", properties:{}, geometry:gj }];
+  // 좌표가 경도·위도인지 먼저 확인 (처음 도형의 첫 점)
+  let sample = null;
+  for (const f of list) { const p = firstPoint(f.geometry); if (p) { sample = p; break; } }
+  geographic = !sample || (Math.abs(sample[0]) <= 180 && Math.abs(sample[1]) <= 90);
+  const warn = $("warn");
+  if (!geographic) { warn.style.display = "inline"; warn.textContent = "[확인 필요] 좌표가 도(°)가 아닙니다. 평면좌표로 그립니다."; }
+  else warn.style.display = "none";
+  if (sample && geographic) kx = Math.cos(sample[1] * Math.PI / 180); else kx = 1;
+
+  feats = [];
+  for (const f of list) {
+    if (!f || !f.geometry) continue;
+    const rec = { props: f.properties || {}, kind: "poly", rings: [], bbox: [Infinity,Infinity,-Infinity,-Infinity], show: true };
+    addGeom(rec, f.geometry);
+    if (rec.rings.length) feats.push(rec);
+  }
+  const keys = new Set();
+  for (let i = 0; i < Math.min(feats.length, 300); i++) Object.keys(feats[i].props).forEach(k => keys.add(k));
+  cols = [...keys];
+  selected = -1; $("sel").style.display = "none"; $("q").value = "";
+  $("drop").style.display = "none";
+  fitAll(); applyFilter();
+}
+function firstPoint(g) {
+  if (!g) return null;
+  if (g.type === "GeometryCollection") { for (const x of g.geometries||[]) { const p = firstPoint(x); if (p) return p; } return null; }
+  let c = g.coordinates;
+  while (Array.isArray(c) && Array.isArray(c[0])) c = c[0];
+  return Array.isArray(c) && typeof c[0] === "number" ? c : null;
+}
+function ring(coords, rec) {
+  const a = new Float64Array(coords.length * 2);
+  for (let i = 0; i < coords.length; i++) {
+    const x = coords[i][0] * kx, y = -coords[i][1];
+    a[2*i] = x; a[2*i+1] = y;
+    if (x < rec.bbox[0]) rec.bbox[0] = x; if (y < rec.bbox[1]) rec.bbox[1] = y;
+    if (x > rec.bbox[2]) rec.bbox[2] = x; if (y > rec.bbox[3]) rec.bbox[3] = y;
+  }
+  rec.rings.push(a);
+}
+function addGeom(rec, g) {
+  const c = g.coordinates;
+  switch (g.type) {
+    case "Polygon": rec.kind = "poly"; c.forEach(r => ring(r, rec)); break;
+    case "MultiPolygon": rec.kind = "poly"; c.forEach(p => p.forEach(r => ring(r, rec))); break;
+    case "LineString": rec.kind = "line"; ring(c, rec); break;
+    case "MultiLineString": rec.kind = "line"; c.forEach(r => ring(r, rec)); break;
+    case "Point": rec.kind = "pt"; ring([c], rec); break;
+    case "MultiPoint": rec.kind = "pt"; ring(c, rec); break;
+    case "GeometryCollection": (g.geometries||[]).forEach(x => addGeom(rec, x)); break;
+  }
+}
+
+// ── 화면 ──
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  const r = cv.getBoundingClientRect();
+  W = r.width; H = r.height;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  draw();
+}
+window.addEventListener("resize", resize);
+
+function bounds(idx) {
+  let b = [Infinity,Infinity,-Infinity,-Infinity];
+  const use = idx === undefined ? feats : [feats[idx]];
+  for (const f of use) {
+    if (idx === undefined && !f.show) continue;
+    if (f.bbox[0] < b[0]) b[0] = f.bbox[0]; if (f.bbox[1] < b[1]) b[1] = f.bbox[1];
+    if (f.bbox[2] > b[2]) b[2] = f.bbox[2]; if (f.bbox[3] > b[3]) b[3] = f.bbox[3];
+  }
+  return b;
+}
+function fitBox(b) {
+  if (!isFinite(b[0])) return;
+  const w = Math.max(b[2]-b[0], 1e-9), h = Math.max(b[3]-b[1], 1e-9);
+  const pad = 0.92;
+  scale = Math.min(W / w, H / h) * pad;
+  if (b[2]-b[0] < 1e-9 && b[3]-b[1] < 1e-9) scale = 1e5;   // 점 하나
+  ox = W/2 - (b[0]+b[2])/2 * scale;
+  oy = H/2 - (b[1]+b[3])/2 * scale;
+  draw();
+}
+function fitAll() { fitBox(bounds()); }
+$("fit").onclick = fitAll;
+
+function drawFeature(f, vx0, vy0, vx1, vy1) {
+  // 보이는 영역 밖이면 건너뜀
+  const b = f.bbox;
+  if (b[2] < vx0 || b[0] > vx1 || b[3] < vy0 || b[1] > vy1) return false;
+  if (f.kind === "pt") {
+    for (const r of f.rings) for (let i = 0; i < r.length; i += 2) {
+      const sx = r[i]*scale+ox, sy = r[i+1]*scale+oy;
+      ctx.moveTo(sx+3, sy); ctx.arc(sx, sy, 3, 0, 6.2832);
+    }
+    return true;
+  }
+  const bw = (b[2]-b[0])*scale, bh = (b[3]-b[1])*scale;
+  if (bw < TINY_PX && bh < TINY_PX) {   // 아주 작은 도형은 네모 하나로 (축소 상태에서 속도 확보)
+    ctx.rect(b[0]*scale+ox, b[1]*scale+oy, Math.max(bw,1.2), Math.max(bh,1.2)); return true;
+  }
+  for (const r of f.rings) {
+    let lx = 0, ly = 0, first = true;
+    const n = r.length;
+    for (let i = 0; i < n; i += 2) {
+      const sx = r[i]*scale+ox, sy = r[i+1]*scale+oy;
+      if (first) { ctx.moveTo(sx, sy); lx = sx; ly = sy; first = false; continue; }
+      if (i < n-2 && Math.abs(sx-lx) < 0.6 && Math.abs(sy-ly) < 0.6) continue;  // 너무 가까운 점 생략
+      ctx.lineTo(sx, sy); lx = sx; ly = sy;
+    }
+    if (f.kind === "poly") ctx.closePath();
+  }
+  return true;
+}
+let pending = false;
+function draw() {
+  if (pending) return; pending = true;
+  requestAnimationFrame(() => { pending = false; paint(); });
+}
+let paintMs = 0;
+function paint() {
+  const t0 = performance.now();
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0, 0, W, H);
+  if (!feats.length) return;
+  const vx0 = -ox/scale, vx1 = (W-ox)/scale, vy0 = -oy/scale, vy1 = (H-oy)/scale;
+  ctx.lineWidth = 1; ctx.lineJoin = "round";
+  // 종류별로 한 번에 그림 (빠름)
+  for (const kind of ["poly","line","pt"]) {
+    ctx.beginPath();
+    let n = 0;
+    for (let i = 0; i < feats.length; i++) {
+      const f = feats[i];
+      if (!f.show || f.kind !== kind || i === selected) continue;
+      if (drawFeature(f, vx0, vy0, vx1, vy1)) n++;
+    }
+    if (!n) continue;
+    if (kind === "poly") { ctx.fillStyle = FILL; ctx.fill("evenodd"); ctx.strokeStyle = STROKE; ctx.stroke(); }
+    else if (kind === "line") { ctx.strokeStyle = STROKE; ctx.stroke(); }
+    else { ctx.fillStyle = STROKE; ctx.fill(); }
+  }
+  if (selected >= 0 && feats[selected]) {
+    ctx.beginPath(); drawFeature(feats[selected], -Infinity, -Infinity, Infinity, Infinity);
+    ctx.lineWidth = 2; ctx.strokeStyle = HILITE_STROKE; ctx.fillStyle = HILITE_FILL;
+    if (feats[selected].kind !== "line") ctx.fill("evenodd");
+    ctx.stroke();
+  }
+  paintMs = performance.now() - t0;
+  $("zoomms").textContent = "그리기 " + Math.round(paintMs) + "ms";
+}
+
+// ── 이동·확대 ──
+let drag = null, moved = false;
+cv.addEventListener("mousedown", e => { drag = {x:e.clientX, y:e.clientY, ox, oy}; moved = false; cv.classList.add("drag"); });
+window.addEventListener("mouseup", e => {
+  cv.classList.remove("drag");
+  if (drag && !moved) pick(e);
+  drag = null;
+});
+window.addEventListener("mousemove", e => {
+  if (drag) {
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+    ox = drag.ox + dx; oy = drag.oy + dy; draw();
+  }
+  const r = cv.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  if (mx >= 0 && my >= 0 && mx <= r.width && my <= r.height && feats.length) {
+    const wx = (mx-ox)/scale, wy = (my-oy)/scale;
+    $("coord").textContent = geographic ? `경도 ${(wx/kx).toFixed(6)}  위도 ${(-wy).toFixed(6)}` : `x ${wx.toFixed(2)}  y ${(-wy).toFixed(2)}`;
+  }
+});
+function zoomAt(mx, my, f) {
+  const wx = (mx-ox)/scale, wy = (my-oy)/scale;
+  scale *= f; ox = mx - wx*scale; oy = my - wy*scale; draw();
+}
+cv.addEventListener("wheel", e => {
+  e.preventDefault();
+  const r = cv.getBoundingClientRect();
+  zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.2 : 1/1.2);
+}, { passive:false });
+$("zin").onclick = () => zoomAt(W/2, H/2, 1.5);
+$("zout").onclick = () => zoomAt(W/2, H/2, 1/1.5);
+
+// ── 클릭해서 도형 고르기 ──
+function inRing(r, x, y) {
+  let c = false;
+  for (let i = 0, j = r.length-2; i < r.length; j = i, i += 2) {
+    const xi = r[i], yi = r[i+1], xj = r[j], yj = r[j+1];
+    if ((yi > y) !== (yj > y) && x < (xj-xi)*(y-yi)/(yj-yi) + xi) c = !c;
+  }
+  return c;
+}
+function distSeg(px,py,ax,ay,bx,by) {
+  const dx=bx-ax, dy=by-ay, l=dx*dx+dy*dy;
+  let t = l ? ((px-ax)*dx+(py-ay)*dy)/l : 0; t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px-(ax+t*dx), py-(ay+t*dy));
+}
+function pick(e) {
+  if (!feats.length) return;
+  const r = cv.getBoundingClientRect();
+  const wx = (e.clientX-r.left-ox)/scale, wy = (e.clientY-r.top-oy)/scale;
+  const tol = 6/scale;
+  let best = -1, bestArea = Infinity;
+  for (let i = 0; i < feats.length; i++) {
+    const f = feats[i]; if (!f.show) continue;
+    const b = f.bbox;
+    if (wx < b[0]-tol || wx > b[2]+tol || wy < b[1]-tol || wy > b[3]+tol) continue;
+    let hit = false;
+    if (f.kind === "poly") {
+      let inside = false;
+      for (const rg of f.rings) if (inRing(rg, wx, wy)) inside = !inside;
+      hit = inside;
+    } else if (f.kind === "line") {
+      for (const rg of f.rings) { for (let k = 0; k < rg.length-2; k += 2) if (distSeg(wx,wy,rg[k],rg[k+1],rg[k+2],rg[k+3]) < tol) { hit = true; break; } if (hit) break; }
+    } else {
+      for (const rg of f.rings) for (let k = 0; k < rg.length; k += 2) if (Math.hypot(wx-rg[k], wy-rg[k+1]) < tol) hit = true;
+    }
+    if (hit) { const a = (b[2]-b[0])*(b[3]-b[1]); if (a < bestArea) { best = i; bestArea = a; } }
+  }
+  select(best, false);
+}
+function select(i, zoom) {
+  selected = i;
+  const box = $("sel");
+  if (i < 0) { box.style.display = "none"; }
+  else {
+    box.style.display = "block"; box.replaceChildren();
+    const p = feats[i].props;
+    for (const k of Object.keys(p)) {
+      const d = document.createElement("div");
+      const s = document.createElement("b"); s.textContent = k + ": ";
+      d.append(s, document.createTextNode(String(p[k])));
+      box.append(d);
+    }
+    if (zoom) fitBox(bounds(i));
+  }
+  document.querySelectorAll("#tbl tr.on").forEach(t => t.classList.remove("on"));
+  const row = document.querySelector(`#tbl tr[data-i="${i}"]`);
+  if (row) { row.classList.add("on"); row.scrollIntoView({block:"nearest"}); }
+  draw();
+}
+
+// ── 속성표 / 검색 ──
+$("q").oninput = applyFilter;
+function applyFilter() {
+  const q = $("q").value.trim().toLowerCase();
+  let shown = 0;
+  for (const f of feats) {
+    f.show = !q || Object.values(f.props).some(v => String(v).toLowerCase().includes(q));
+    if (f.show) shown++;
+  }
+  $("cnt").textContent = `${shown.toLocaleString()} / ${feats.length.toLocaleString()}개` + (shown > TABLE_MAX_ROWS ? ` (표에는 앞 ${TABLE_MAX_ROWS}행만)` : "");
+  const t = $("tbl"); t.replaceChildren();
+  const thead = document.createElement("thead"), hr = document.createElement("tr");
+  for (const c of cols) { const th = document.createElement("th"); th.textContent = c; hr.append(th); }
+  thead.append(hr); t.append(thead);
+  const tb = document.createElement("tbody"); let n = 0;
+  for (let i = 0; i < feats.length && n < TABLE_MAX_ROWS; i++) {
+    if (!feats[i].show) continue;
+    const tr = document.createElement("tr"); tr.dataset.i = i;
+    for (const c of cols) { const td = document.createElement("td"); td.textContent = feats[i].props[c] ?? ""; tr.append(td); }
+    tr.onclick = () => select(i, true);
+    tb.append(tr); n++;
+  }
+  t.append(tb);
+  if (selected >= 0 && !feats[selected].show) selected = -1;
+  draw();
+}
+
+resize();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# 인증키 파일은 git 에 올리지 않음
+*.env
+.env
+__pycache__/
+.csv
