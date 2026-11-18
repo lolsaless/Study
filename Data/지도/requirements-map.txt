@@ -1,0 +1,4 @@
+packaging>=24
+geopandas>=1.1,<2
+pyogrio>=0.11,<1
+folium>=0.19,<1
