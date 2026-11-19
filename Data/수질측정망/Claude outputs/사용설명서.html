@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한강권역 물환경 수질측정망 대시보드 — 초보자 사용 설명서</title>
+<style>
+:root{--bg:#f4f7f6;--panel:#fff;--ink:#14201f;--ink2:#46595a;--ink3:#7b8b8a;--line:#d9e2e0;--accent:#0c666b;--accent-soft:#dcecea;--warn:#9a6a00;--warn-soft:#fff4d8;--red:#cf2a1e;--blue:#2a6bc9;
+  --f:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;--m:Consolas,"SF Mono",Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 var(--f)}
+header.hero{background:linear-gradient(135deg,#0c666b,#14858a);color:#fff;padding:44px 24px 36px}
+header.hero .in{max-width:1080px;margin:0 auto}
+header.hero h1{margin:0 0 6px;font-size:30px;letter-spacing:-.5px}
+header.hero p{margin:0;opacity:.92;font-size:15.5px}
+header.hero .chips{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+header.hero .chips span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:3px 12px;font-size:13px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:28px}
+nav.toc{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:24px 0}
+nav.toc b{display:block;font-size:12px;color:var(--ink3);margin-bottom:6px;letter-spacing:.5px}
+nav.toc a{display:block;color:var(--ink2);text-decoration:none;font-size:13.5px;padding:4px 10px;border-left:2px solid var(--line)}
+nav.toc a:hover{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft)}
+main{padding:24px 0 80px;min-width:0}
+section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin-bottom:22px}
+h2{margin:0 0 14px;font-size:22px;color:var(--accent);display:flex;align-items:center;gap:10px}
+h2 .no{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-size:15px}
+h3{margin:22px 0 8px;font-size:17px}
+p{margin:8px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#eef4f3;font-weight:700}
+td.n{text-align:right;font-family:var(--m)}
+code,.k{font-family:var(--m);background:#eef2f1;border-radius:4px;padding:1px 5px;font-size:13px}
+.tip,.warn,.note{border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.2px}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent)}
+.warn{background:var(--warn-soft);border-left:4px solid var(--warn)}
+.note{background:#f1f4f8;border-left:4px solid var(--blue)}
+.tip b:first-child,.warn b:first-child,.note b:first-child{margin-right:4px}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:14px 0}
+.flow .st{flex:1 1 112px;background:#f6f9f8;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.2px;position:relative;margin-right:20px}
+.flow .st:last-child{margin-right:0}
+.flow .st:not(:last-child)::after{content:"▶";position:absolute;right:-18px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:13px}
+.flow .st b{display:block;color:var(--accent);font-size:13.5px;margin-bottom:2px}
+.flow .st .num{font-family:var(--m);color:var(--ink);font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px 16px;background:#fbfcfc}
+.card h4{margin:0 0 4px;font-size:15px;color:var(--accent)}
+.card p{margin:4px 0;font-size:14px}
+/* 화면 모형 */
+.mock{border:2px solid var(--ink3);border-radius:10px;overflow:hidden;font-size:12.5px;margin:12px 0;background:#fff}
+.mock .top{background:#eef4f3;padding:8px 12px;display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.mock .body{display:grid;grid-template-columns:190px 1fr}
+.mock .side{border-right:1px solid var(--line);padding:8px}
+.mock .mainm{padding:8px;display:flex;flex-direction:column;gap:6px}
+.mock .blk{border:1.5px dashed var(--accent);border-radius:6px;padding:5px 8px;background:#f7fbfb}
+.mock .badge{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;font-size:11px;font-weight:700;margin-right:4px}
+.scale{height:14px;border-radius:7px;background:linear-gradient(90deg,#dbeaf7,#8fbfe6,#f3dc8c,#ee8a46,#cf2a1e);margin:6px 0}
+.dots{display:flex;align-items:center;gap:14px;font-size:12.5px;color:var(--ink2)}
+.dots i{display:inline-block;border-radius:50%;border:1px solid rgba(0,0,0,.25)}
+.formula{font-family:var(--m);background:#f3f6f6;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0;font-size:13.5px;text-align:center}
+dl.term{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;margin:8px 0}
+dl.term dt{font-weight:700;color:var(--accent)}
+dl.term dd{margin:0}
+footer{color:var(--ink3);font-size:12.5px;text-align:center;padding:10px 0 40px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}nav.toc{position:static;max-height:none;padding:16px 0 0}.grid2{grid-template-columns:1fr}.mock .body{grid-template-columns:1fr}dl.term{grid-template-columns:1fr}}
+@media print{body{background:#fff;font-size:12.5px}nav.toc{display:none}.wrap{display:block}section{break-inside:avoid;border:0;padding:10px 0}header.hero{background:#fff;color:#000;padding:0 0 10px;border-bottom:2px solid #000}header.hero .chips span{border-color:#999}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="in">
+  <h1>한강권역 물환경 수질측정망 대시보드</h1>
+  <p>처음 쓰는 사람을 위한 사용 설명서 — 자료는 어디서 왔고, 어떻게 다듬었고, 화면에서 무엇을 할 수 있으며, 분석·해석은 어떤 원칙으로 만들어졌는가</p>
+  <div class="chips"><span>대시보드 v4.0</span><span>자료: 2000년 1월 ~ 2026년 9월</span><span>조사기관 12곳 · 지점 647개</span><span>항목 7개</span><span>작성 2026-11-18</span></div>
+</div></header>
+
+<div class="wrap">
+<nav class="toc">
+  <b>목차</b>
+  <a href="#s1">1. 한눈에 보기</a>
+  <a href="#s2">2. 여는 방법</a>
+  <a href="#s3">3. 데이터 원본</a>
+  <a href="#s4">4. 데이터 정제 과정</a>
+  <a href="#s5">5. 화면 구성</a>
+  <a href="#s6">6. 탭별 기능</a>
+  <a href="#s7">7. 경향 분석의 원칙</a>
+  <a href="#s8">8. 자료 해석의 원칙</a>
+  <a href="#s9">9. 자동 점검과 표시 기호</a>
+  <a href="#s10">10. 자료 갱신</a>
+  <a href="#s11">11. 꼭 알아 둘 점</a>
+  <a href="#s12">12. 용어 풀이</a>
+</nav>
+
+<main>
+<!-- 1 -->
+<section id="s1">
+  <h2><span class="no">1</span>한눈에 보기</h2>
+  <p>이 대시보드는 <b>국가 수질측정망</b>에서 측정한 한강 권역(대권역 '한강') 하천·호소의 수질 자료를 <b>기관별·지점별·월별</b>로 보여 주는 HTML 파일입니다. 인터넷이 없어도 파일을 더블클릭하면 열립니다.</p>
+  <div class="grid2">
+    <div class="card"><h4>무엇을 볼 수 있나</h4><p>TOC·COD·BOD·SS·T-N·T-P·색도 7개 항목을 지점마다 2000년부터 월별로 봅니다. 그래프, 상·하류 비교, 지도, 색칸(히트맵), 추세 검정, 자동 해석 문장이 있습니다.</p></div>
+    <div class="card"><h4>누가 쓰나</h4><p>수질 자료를 보고서·검토에 쓰는 실무자. 통계나 프로그램을 몰라도 버튼만 눌러 쓸 수 있게 만들었습니다.</p></div>
+    <div class="card"><h4>무엇을 고칠 수 있나</h4><p>측정값은 고치지 않습니다(원자료 그대로). 화면 설정, 상·하류 종단 순서, 색, 판정 기준만 바꿀 수 있습니다.</p></div>
+    <div class="card"><h4>자료는 어떻게 새로 받나</h4><p>인터넷이 되는 PC에서 <code>수질측정망_갱신</code> 실행 파일을 더블클릭하면 최신 자료를 받아 대시보드를 다시 만듭니다.</p></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <h2><span class="no">2</span>여는 방법</h2>
+  <table>
+    <tr><th style="width:30%">방법</th><th>언제 쓰나</th><th>할 수 있는 것</th></tr>
+    <tr><td><b>① HTML 파일 더블클릭</b><br><code>한강권역_수질측정망_대시보드.html</code></td><td>보기만 할 때(행정망 PC 포함). Edge·Chrome 권장</td><td>모든 그래프·분석·해석. 설정·종단 순서는 <b>이 브라우저에만</b> 저장</td></tr>
+    <tr><td><b>② 대시보드_열기</b><br>Windows <code>대시보드_열기_windows.bat</code><br>Mac <code>대시보드_열기_mac.command</code></td><td>설정을 파일에 저장하거나 V월드 배경지도를 쓸 때</td><td>①의 모든 것 + 설정·종단 순서를 <code>수질측정망_설정.xlsx</code>에 저장, 자료가 바뀌면 자동으로 다시 만듦</td></tr>
+    <tr><td><b>③ 도구모음</b><br><code>도구모음_windows.bat</code> / <code>_mac.command</code></td><td>자료 갱신·빌드·예약 등 관리 작업</td><td>번호 메뉴 1~9 (10장 참고)</td></tr>
+  </table>
+  <div class="tip"><b>팁</b> Mac에서 <code>.command</code> 파일을 처음 열 때 "확인되지 않은 개발자" 안내가 나오면, 파일을 <b>오른쪽 클릭 → 열기</b>를 한 번 해 주면 됩니다.</div>
+  <div class="note"><b>참고</b> HTML 파일은 약 7MB입니다. 27년 치 자료(647개 지점)가 들어 있어 처음 여는 데 몇 초 걸릴 수 있습니다.</div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <h2><span class="no">3</span>데이터 원본</h2>
+  <h3>3.1 어디서 받았나</h3>
+  <table>
+    <tr><th style="width:24%">구분</th><th>내용</th></tr>
+    <tr><td>제공처</td><td>공공데이터포털 — 국립환경과학원 <b>물환경 수질측정망 운영결과</b> 서비스(WaterQualityService)</td></tr>
+    <tr><td>요청 기능</td><td><code>getWaterMeasuringList</code> (수질측정망 측정 결과 조회)</td></tr>
+    <tr><td>받는 범위</td><td>지점 코드표에서 <b>대권역 = 한강</b>인 지점(648개 코드) · 연도별 · 모든 조사기관</td></tr>
+    <tr><td>기간</td><td>2000년 1월 ~ 2026년 9월 (마지막 검사일 2026-09-30, 받은 날 2026-11-18)</td></tr>
+    <tr><td>인증</td><td>공공데이터포털 일반 인증키 — <code>수질측정망/물환경.env</code> 파일에 보관(외부에 공유하지 않음)</td></tr>
+    <tr><td>받은 원본 규모</td><td>약 <b>24만 4천 행</b>(244,391행), 측정 항목 포함 <b>69개 열</b>(수온·pH·DO·중금속 등 60여 항목)</td></tr>
+  </table>
+  <h3>3.2 어떤 항목을 쓰나 — 7개만</h3>
+  <p>원본에는 60개가 넘는 항목이 있지만, 대시보드는 하천 유기물·영양염·탁도 관리에 쓰는 7개 항목만 남겼습니다.</p>
+  <table>
+    <tr><th>대시보드 항목</th><th>원본 열</th><th>단위</th><th>뜻(쉽게)</th></tr>
+    <tr><td><b>TOC</b> 총유기탄소</td><td><code>itemToc</code></td><td>mg/L</td><td>물속 유기물 전체(분해가 어려운 것 포함). 하천 생활환경기준 등급 항목</td></tr>
+    <tr><td><b>COD</b> 화학적산소요구량</td><td><code>itemCod</code></td><td>mg/L</td><td>약품(산화제)으로 잰 유기물 양</td></tr>
+    <tr><td><b>BOD</b> 생물화학적산소요구량</td><td><code>itemBod</code></td><td>mg/L</td><td>미생물이 분해할 수 있는 유기물 양</td></tr>
+    <tr><td><b>SS</b> 부유물질</td><td><code>itemSs</code></td><td>mg/L</td><td>물에 떠 있는 흙·조류 같은 입자</td></tr>
+    <tr><td><b>T-N</b> 총질소</td><td><code>itemTn</code></td><td>mg/L</td><td>질소 전체(영양염)</td></tr>
+    <tr><td><b>T-P</b> 총인</td><td><code>itemTp</code></td><td>mg/L</td><td>인 전체(녹조 관리의 핵심 영양염)</td></tr>
+    <tr><td><b>색도</b></td><td><code>itemCol</code></td><td>도</td><td>물의 색. 측정하는 지점이 적음(2013년 이후 일부)</td></tr>
+  </table>
+  <h3>3.3 어떤 지점이 들어 있나</h3>
+  <table>
+    <tr><th>조사기관 (대시보드 '관리 구분' 순서)</th><th class="n">지점 수</th></tr>
+    <tr><td><b>전체 지점</b> (모든 기관)</td><td class="n"><b>647</b></td></tr>
+    <tr><td>경기도 보건환경연구원 <span class="k">맨 위 고정</span></td><td class="n">68</td></tr>
+    <tr><td>한국농어촌공사</td><td class="n">176</td></tr>
+    <tr><td>한강유역환경청</td><td class="n">149</td></tr>
+    <tr><td>원주지방환경청</td><td class="n">83</td></tr>
+    <tr><td>한강물환경연구소</td><td class="n">81</td></tr>
+    <tr><td>한국수자원공사</td><td class="n">26</td></tr>
+    <tr><td>서울특별시 보건환경연구원</td><td class="n">23</td></tr>
+    <tr><td>강원도 보건환경연구원</td><td class="n">18</td></tr>
+    <tr><td>충청북도 보건환경연구원</td><td class="n">16</td></tr>
+    <tr><td>인천광역시 보건환경연구원 · 충청남도 보건환경연구원 · 금강유역환경청</td><td class="n">4 · 2 · 1</td></tr>
+  </table>
+  <p>지점 구분: 하천수 374 · 농업용수(저수지) 176 · 호소수 73 · 산단하천 22 · 도시관류 2. 경기도 보건환경연구원 다음은 <b>지점이 많은 기관 순</b>으로 자동 정렬되므로, 자료를 새로 받아 지점 수가 바뀌면 순서도 바뀔 수 있습니다.</p>
+  <div class="warn"><b>주의</b> 연구원이 따로 조사하던 시료번호(예: 한탄강 연1·연2·연4)는 국가 수질측정망에 등록된 지점이 아니어서 이 대시보드에 없습니다. v4부터 자체 조사 엑셀 자료는 쓰지 않습니다.</div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <h2><span class="no">4</span>데이터 정제 과정</h2>
+  <p>원본을 받아 화면에 보이기까지 아래 순서를 거칩니다. <b>측정값을 임의로 고치거나 지우지 않는 것</b>이 원칙입니다. 이상해 보이는 값은 '자동 점검'으로 표시만 합니다.</p>
+  <div class="flow">
+    <div class="st"><b>① 받기</b>API에서 연도별·지점 10개씩 요청<br><span class="num">244,391행 · 69열</span></div>
+    <div class="st"><b>② 고르기</b>7개 항목만 남김<br>7개가 모두 빈 행은 버림</div>
+    <div class="st"><b>③ 다듬기</b>좌표 도·분·초 → 십진수<br>완전히 같은 행 제거<br><span class="num">227,454행</span></div>
+    <div class="st"><b>④ 월로 모으기</b>같은 달 여러 회차는 평균<br><span class="num">647지점 × 321개월</span></div>
+    <div class="st"><b>⑤ 점검·묶기</b>자동 점검 표시<br>조사기관별 묶음</div>
+  </div>
+  <h3>4.1 단계별 설명</h3>
+  <table>
+    <tr><th style="width:18%">단계</th><th>하는 일</th><th style="width:30%">왜</th></tr>
+    <tr><td>① 받기</td><td>한 번에 지점 10개·한 해씩 요청하고, 연도별 파일(<code>수질측정망/연도별/2000.csv</code> …)로 저장합니다. 일부 요청이 실패한 해는 <code>연도_partial.csv</code>로 따로 두고 완성본은 건드리지 않습니다.</td><td>중간에 끊겨도 받은 만큼은 남고, 다음 실행 때 실패한 해만 다시 받습니다.</td></tr>
+    <tr><td>② 고르기</td><td>조사기관·지점·연월·회차·검사일·좌표와 7개 항목만 남깁니다. 7개 항목이 모두 비어 있는 행(다른 항목만 잰 행)은 버립니다.</td><td>필요 없는 열을 빼서 파일을 가볍게 합니다.</td></tr>
+    <tr><td>③ 다듬기</td><td>좌표가 도·분·초로 오면 십진수 위도·경도로 바꿉니다. 모든 값이 똑같은 중복 행은 하나만 남깁니다. 연도별 파일을 합쳐 <code>수질측정망_자료.csv</code>를 만듭니다.</td><td>지도에 정확히 찍고, 같은 값을 두 번 세지 않기 위해서입니다.</td></tr>
+    <tr><td>④ 월로 모으기</td><td>월은 API의 <b>측정연월(wmyr·wmod)</b>을 기준으로 합니다. 한 달에 여러 번(2016년 이후 월 2~4회 지점이 많음) 잰 값은 <b>산술평균</b>합니다(평균한 지점·월·항목 202,662건). 2000년 1월 ~ 2026년 9월을 빠짐없는 321개월 축으로 만들고, 측정하지 않은 달은 빈칸입니다.</td><td>지점마다 측정 횟수가 달라도 같은 월 단위로 비교하기 위해서입니다.</td></tr>
+    <tr><td>⑤ 점검·묶기</td><td>이상값 의심·전월 동일·검사일 불일치를 자동 표시합니다(9장). 지점을 조사기관별로 묶고, '전체 지점' 묶음을 맨 위에 둡니다.</td><td>사람이 확인할 곳을 알려 주되 값은 바꾸지 않습니다.</td></tr>
+  </table>
+  <h3>4.2 날짜가 이상한 행은?</h3>
+  <p>원자료에는 검사일이 측정연월과 다른 행이 있습니다. 앞뒤 1개월 차이는 조사 일정상 흔하므로 그대로 둡니다. <b>2개월 이상</b> 차이 나는 행(예: 검사일 <code>2909-12-10</code>)은 값은 측정연월 기준으로 쓰고, 자료 점검 탭에 <b>'검토필요'</b>로 표시합니다(196건).</p>
+  <h3>4.3 화면 파일을 가볍게 하는 방법</h3>
+  <p>월별 값 표를 그대로 넣으면 HTML이 10MB가 넘습니다. 지점·항목마다 <b>첫 측정 달 이전과 마지막 측정 달 이후의 빈칸을 잘라내고</b>, 값을 쉼표로 이은 짧은 글자로 저장했다가 화면이 열릴 때 원래 표로 되돌립니다(약 7MB). 숫자는 소수 넷째 자리까지 보존합니다.</p>
+  <div class="tip"><b>검증</b> 화면에 보이는 값은 원본 CSV에서 따로 계산한 값과 같습니다. 예: 한강유역환경청 '한탄강4'의 T-P, 2017년 1월~2026년 9월 → 측정 115개월, 평균 0.04708 mg/L (화면과 원자료 일치).</div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <h2><span class="no">5</span>화면 구성</h2>
+  <div class="mock">
+    <div class="top"><span class="badge">A</span><b>제목·버전</b><span class="blk" style="margin-left:auto"><span class="badge">B</span>항목 버튼 TOC · COD · BOD · SS · T-N · T-P · 색도</span></div>
+    <div class="top" style="background:#f7faf9"><span class="badge">C</span>탭: 시계열 · 상·하류 종단 · 히트맵 · 지도 · 연도별 색도 · 경향 분석 · 자료 해석 · 자료 점검 · 설정 · 인쇄·PDF</div>
+    <div class="body">
+      <div class="side">
+        <div class="blk"><span class="badge">D</span><b>관리 구분</b><br>전체 지점 647<br>경기도 보건환경연구원 68<br>한국농어촌공사 176 …</div>
+        <div class="blk" style="margin-top:6px"><span class="badge">E</span><b>하천·지점 목록</b><br>▸ 한탄강 6/16<br>▸ 남한강상류 0/9 …</div>
+        <div class="blk" style="margin-top:6px"><span class="badge">F</span><b>표시 옵션 · 색상</b></div>
+      </div>
+      <div class="mainm">
+        <div class="blk"><span class="badge">G</span><b>기간 설정</b> 2017년 1월 ~ 2026년 9월 [최근 1·3·5·10년 · 올해 · 작년 · 전체]</div>
+        <div class="blk"><span class="badge">H</span><b>요약 카드 5개</b> 최근 측정월 평균 · 가장 높은 지점 · 단일 최고값 · 기준 달성 · 자료 점검</div>
+        <div class="blk" style="min-height:70px"><span class="badge">I</span><b>선택한 탭의 그래프·표</b></div>
+      </div>
+    </div>
+  </div>
+  <table>
+    <tr><th style="width:6%">기호</th><th style="width:20%">이름</th><th>사용법</th></tr>
+    <tr><td>A</td><td>제목</td><td>제목 아래에 지금 묶음(조사기관)·기간·지점 수·만든 시각이 나옵니다.</td></tr>
+    <tr><td>B</td><td>항목 버튼</td><td>보고 싶은 항목을 누릅니다. 모든 탭에 같이 적용됩니다. 그 기관이 재지 않는 항목이면 그래프 옆에 "⚠ 이 항목 자료가 없습니다"가 뜹니다.</td></tr>
+    <tr><td>C</td><td>탭</td><td>보는 방식을 바꿉니다(6장). 탭 옆 숫자는 확인할 건수입니다.</td></tr>
+    <tr><td>D</td><td>관리 구분</td><td>조사기관을 고릅니다. <b>보던 탭·항목·기간은 그대로 유지</b>되고 지점만 바뀝니다. 처음 열면 경기도 보건환경연구원의 <b>한탄강 중권역 지점 · 최근 10년</b>이 선택됩니다.</td></tr>
+    <tr><td>E</td><td>하천·지점 목록</td><td>중권역(하천 묶음)은 <b>접혀 있습니다.</b> 이름 왼쪽 <b>▸</b>를 누르면 지점이 펼쳐집니다. <b>하천 이름을 누르면</b> 그 하천 지점만 선택되고 색이 자동으로 정해집니다. ☑ 선택, ☆ 강조, ● 색 직접 지정, 검색창으로 지점 찾기. 이름 옆 <code>6/16</code> = 선택 6개 / 지점 16개.</td></tr>
+    <tr><td>F</td><td>표시 옵션</td><td>▲▼ 판정 기준, 값 라벨, 평균선, 기준선, y축(선형·이상치 잘라 보기·로그), 빈 달 잇기, ⚡ 특이 경향, 색상.</td></tr>
+    <tr><td>G</td><td>기간 설정</td><td>시작·끝 연/월을 고르거나 빠른 버튼을 누릅니다. 모든 탭·분석·해석에 적용됩니다. 24개월 미만이면 "추세 해석은 24개월 이상 권장"이 붙습니다.</td></tr>
+    <tr><td>H</td><td>요약 카드</td><td>선택 지점·기간·항목의 핵심 숫자. '자료 점검' 카드를 누르면 점검 탭으로 갑니다.</td></tr>
+  </table>
+  <div class="tip"><b>팁</b> 선택·색·옵션·펼친 하천은 이 브라우저에 자동 저장됩니다. 처음 상태로 돌리려면 왼쪽 아래 <b>[처음 화면으로]</b>를 누릅니다.</div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <h2><span class="no">6</span>탭별 기능</h2>
+  <h3>6.1 시계열</h3>
+  <p>지점별 <b>월별 변화 꺾은선</b>과 데이터 표. x축은 <code>19년 9월</code> 형식입니다. 점 옆 ▲▼는 그 지점 평균에서 크게 벗어난 달, ⚡는 갑자기 튄 지점입니다(9장). 표는 [표 복사]로 엑셀에 붙여 넣거나 CSV로 저장합니다.</p>
+  <div class="card"><h4>비슷한 경향 지점 찾기 (시계열 그래프 아래)</h4>
+    <p>월별 값이 <b>함께 오르내리는 지점</b>끼리 묶어 보여 줍니다. [이 지점만 보기]를 누르면 그 지점만 선택되고, [↩ 이전 선택으로]로 되돌립니다.</p>
+    <p>• 찾는 범위: 선택한 지점끼리 / 묶음 전체 지점 • 비교 방식: 월별 값 / 계절 제거 • 기준 ρ(기본 0.7) • 기준 지점과 비슷한 지점 순위 12곳</p></div>
+  <h3>6.2 상·하류 종단</h3>
+  <p>한 중권역의 지점을 <b>상류 → 하류</b> 순서로 놓고 달마다 선을 그립니다. 점의 <b>색과 크기</b>가 농도를 나타냅니다(옅은 파랑 = 낮음 → 빨강 = 높음, 높을수록 큰 점). 아래 표는 바로 위(상류) 지점보다 30% 이상 늘어난 구간에 ▲를 붙입니다.</p>
+  <div class="card"><h4>✎ 종단 편집 — 지도에서 상류·하류 순서 정하기</h4>
+    <p>1. [✎ 종단 편집] → 아래에 편집 지도가 열립니다. 2. 중권역(예: 한탄강)을 고릅니다. 3. <b>[지도에서 상류부터 차례로 누르기]</b>를 누르고 최상류 지점부터 원을 차례로 누르면 1, 2, 3…이 붙습니다. 오른쪽 목록의 ▲▼로 순서를 바꾸고 ✕로 뺄 수 있습니다. 4. [저장] — <code>대시보드_열기</code>로 열었으면 <code>수질측정망_설정.xlsx</code>의 '종단순서' 시트에, 파일로 열었으면 이 브라우저에 저장됩니다. [기본 순서로]는 지점코드 순서로 되돌립니다.</p></div>
+  <h3>6.3 히트맵</h3>
+  <p>세로 = 지점, 가로 = 월인 색칸 표입니다. '측정값' 모드는 농도에 따라 <b>옅은 파랑 → 빨강</b>, '평균 대비' 모드는 지점 평균보다 높으면 빨강·낮으면 파랑입니다. 칸 테두리 점선은 자동 점검 표시입니다. 칸을 누르면 그 지점을 강조해 시계열로 갑니다.</p>
+  <h3>6.4 지도</h3>
+  <p>지점을 원으로 표시합니다. <b>원 색과 크기 = 농도</b>(최근 측정월 · 기간 평균 · 특정 달 중 선택).</p>
+  <div class="scale"></div>
+  <div class="dots"><span><i style="width:8px;height:8px;background:#dbeaf7"></i> 낮음(옅은 파랑, 작은 원)</span><span style="margin-left:auto">높음(빨강, 큰 원) <i style="width:22px;height:22px;background:#cf2a1e"></i></span></div>
+  <p>색 범위는 '최솟값 ~ 상위 95% 값'입니다. 아주 높은 값 하나가 색을 다 차지하지 않게 하기 위해서입니다. 원을 누르면 그 지점의 작은 그래프 창이 열립니다. V월드 인증키가 있으면 배경지도가, 없으면 시군 경계만 나옵니다.</p>
+  <h3>6.5 연도별 색도</h3>
+  <p>해마다 월별 색도의 평균을 그래프·표로 봅니다. 올해처럼 일부 달만 있는 해는 <code>2026*</code>로 표시하고, 강우기 비중 때문에 높게 나올 수 있다고 알려 줍니다.</p>
+  <h3>6.6 경향 분석 (4가지)</h3>
+  <table>
+    <tr><th>하위 탭</th><th>질문</th><th>보는 것</th></tr>
+    <tr><td>추세 검정</td><td>꾸준히 오르나, 내리나?</td><td>지점 × 7개 항목 행렬. 칸 = 연간 변화율(%/년), 진한 색 = 통계적으로 뚜렷함. 칸을 누르면 추세선 그래프</td></tr>
+    <tr><td>항목 간 상관</td><td>두 항목이 함께 움직이나?</td><td>7×7 순위상관(ρ) 행렬과 산점도</td></tr>
+    <tr><td>월별 분포</td><td>달마다 값이 어떻게 퍼져 있나?</td><td>상자그림(가운데 50% 범위·중앙값·튀는 값)</td></tr>
+    <tr><td>기준 초과율</td><td>얼마나 자주 기준을 넘나?</td><td>지점별 초과 횟수·비율(기준선은 바꿀 수 있음)</td></tr>
+  </table>
+  <h3>6.7 자료 해석</h3>
+  <p>선택한 지점·기간·항목의 경향을 <b>문장으로 풀어 씁니다</b>(8장). 연평균 추이·계절 패턴 그래프, 지점별 한 줄 해석 표, 7개 항목 종합 표가 함께 나옵니다. [해석 복사]로 보고서에 붙여 넣고, [MD 저장]으로 파일로 남깁니다. 계절 막대 색은 그래프 오른쪽 위 <b>막대 색(강우기·갈수기·기타)</b>에서 바꿉니다.</p>
+  <h3>6.8 자료 점검 · 설정 · 인쇄·PDF</h3>
+  <table>
+    <tr><td style="width:20%"><b>자료 점검</b></td><td>이상값 의심·전월 동일·검토필요를 유형별로 모아 보여 줍니다. 줄을 누르면 해당 지점의 시계열로 갑니다.</td></tr>
+    <tr><td><b>설정</b></td><td>V월드 인증키(연결 시험), 화면 기본값(배경지도·기본 항목·▲▼ 기준·특이 경향 기준), 자동 점검 기준. 서버로 열면 <code>수질측정망_설정.xlsx</code>에 저장됩니다.</td></tr>
+    <tr><td><b>인쇄·PDF</b></td><td>선택 지점·기간의 7개 항목 그래프와 통계표를 보고서 형태로 인쇄합니다(브라우저 인쇄에서 'PDF로 저장').</td></tr>
+  </table>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <h2><span class="no">7</span>경향 분석의 원칙</h2>
+  <p>수질 자료는 정규분포를 따르지 않고, 튀는 값과 빈 달이 많습니다. 그래서 <b>순위(크기 순서)를 쓰는 비모수 방법</b>을 기본으로 했습니다. 몇 개의 극단값에 결과가 휘둘리지 않습니다.</p>
+  <h3>7.1 추세 검정 — Mann-Kendall + Sen 기울기</h3>
+  <div class="grid2">
+    <div class="card"><h4>Mann-Kendall 검정</h4><p>모든 두 시점 쌍을 비교해 "뒤의 값이 더 큰 경우"와 "더 작은 경우"를 셉니다. 큰 경우가 압도적으로 많으면 <b>증가 추세</b>, 작은 경우가 많으면 <b>감소 추세</b>입니다. 같은 값이 많을 때를 보정합니다.</p></div>
+    <div class="card"><h4>계절 Mann-Kendall</h4><p>자료가 <b>3년 이상</b>이면 1월은 1월끼리, 7월은 7월끼리만 비교한 뒤 합칩니다. 여름에 높고 겨울에 낮은 <b>계절 변화를 추세로 착각하지 않기</b> 위해서입니다.</p></div>
+    <div class="card"><h4>Sen 기울기</h4><p>모든 두 시점 쌍의 기울기를 구해 <b>가운데 값(중앙값)</b>을 씁니다. 튀는 값에 강합니다.</p></div>
+    <div class="card"><h4>판단 기준</h4><p>p &lt; 0.05 = <b>뚜렷한</b> 증가·감소 · p &lt; 0.10 = 약한 경향 · 그 밖 = 뚜렷한 추세 없음. 측정이 4개 미만이면 검정하지 않습니다.</p></div>
+  </div>
+  <div class="formula">연간 변화율(%/년) = Sen 기울기(월당) × 12 ÷ 중앙값 × 100</div>
+  <p>수질 7개 항목은 <b>값이 올라가면 나빠지는 쪽</b>이므로, 증가 = 빨강(악화 방향), 감소 = 파랑(개선 방향)으로 칠합니다.</p>
+  <h3>7.2 항목 간 상관 — Spearman 순위상관(ρ)</h3>
+  <p>같은 지점·같은 달의 두 항목 값을 짝지어, 크기 순서가 같이 움직이는지 봅니다. ρ는 −1 ~ +1이며 1에 가까울수록 함께 오릅니다. 예: SS·T-P가 함께 높으면 강우 때 흙과 함께 인이 들어온 영향을 의심할 수 있습니다. <b>상관은 원인을 증명하지 않습니다.</b></p>
+  <h3>7.3 월별 분포 — 상자그림</h3>
+  <p>상자 = 가운데 50%(1사분위~3사분위), 가로선 = 중앙값, 수염 = 사분위 범위(IQR)의 1.5배 안, 그 밖의 점 = 튀는 값. 상자가 함께 올라가면 수계 전체 요인(강우·계절), 점 하나만 튀면 그 지점만의 요인을 의심합니다.</p>
+  <h3>7.4 기준 초과율</h3>
+  <p>평균은 낮아도 가끔 크게 넘는 지점을 찾기 위해, 측정한 달 중 기준을 넘은 달의 비율을 셉니다. 기준선은 하천 생활환경기준 등급 상한 또는 색도 목표(15도) 중에서 고릅니다.</p>
+  <h3>7.5 하천 생활환경기준 (설정 파일 '기준값' 시트)</h3>
+  <table>
+    <tr><th>항목</th><th>Ia 매우좋음</th><th>Ib 좋음</th><th>II 약간좋음</th><th>III 보통</th><th>IV 약간나쁨</th><th>V 나쁨</th></tr>
+    <tr><td>BOD (mg/L)</td><td class="n">≤1</td><td class="n">≤2</td><td class="n">≤3</td><td class="n">≤5</td><td class="n">≤8</td><td class="n">≤10</td></tr>
+    <tr><td>TOC (mg/L)</td><td class="n">≤2</td><td class="n">≤3</td><td class="n">≤4</td><td class="n">≤5</td><td class="n">≤6</td><td class="n">≤8</td></tr>
+    <tr><td>SS (mg/L)</td><td class="n">≤25</td><td class="n">≤25</td><td class="n">≤25</td><td class="n">≤25</td><td class="n">≤100</td><td>-</td></tr>
+    <tr><td>T-P (mg/L)</td><td class="n">≤0.02</td><td class="n">≤0.04</td><td class="n">≤0.1</td><td class="n">≤0.2</td><td class="n">≤0.3</td><td class="n">≤0.5</td></tr>
+  </table>
+  <p>그 밖은 VI 매우나쁨. 색도는 목표 15도 이하면 '달성'. COD·T-N은 하천 기준이 없어 판정하지 않습니다(참고만). 판정은 <b>선택 기간의 평균</b>으로 하므로 공식 연간 판정과 다를 수 있습니다.</p>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+  <h2><span class="no">8</span>자료 해석의 원칙</h2>
+  <p>자료 해석 탭은 위 통계 결과를 <b>정해진 규칙에 따라 문장으로 옮깁니다.</b> 사람이 쓴 의견이 아니라 계산 결과의 번역이며, 같은 자료·같은 선택이면 항상 같은 문장이 나옵니다. 외부 AI나 인터넷을 쓰지 않습니다.</p>
+  <h3>8.1 문장 구성</h3>
+  <table>
+    <tr><th style="width:16%">문단</th><th>무엇을 말하나</th><th style="width:34%">어떻게 계산하나</th></tr>
+    <tr><td>자료</td><td>기간, 지점 수, 측정값 개수, 채움률, 항목의 뜻</td><td>빈칸을 뺀 월별 값 개수 ÷ (지점 × 개월)</td></tr>
+    <tr><td>수준</td><td>가장 높은·낮은 지점, 지점 간 차이, 최근 1년 등급 분포, 기준 초과가 잦은 지점</td><td>기간 평균, 최근 12개월 평균으로 등급 판정, II등급(또는 목표) 초과 달 비율 30% 이상</td></tr>
+    <tr><td>추세</td><td>뚜렷한 증가·감소 지점 수와 이름, 전체 방향(악화 우세·개선 우세·엇갈림)</td><td>계절 Mann-Kendall p &lt; 0.05, Sen 변화율. 증가가 감소의 2배 이상이고 2곳 이상이면 '악화 우세'</td></tr>
+    <tr><td>최근 변화</td><td>최근 1년이 직전 3년보다 높은지 낮은지, 변화가 큰 지점</td><td>끝 12개월 평균 vs 그 앞 36개월 평균, ±30% 이상이면 '변화 큼'</td></tr>
+    <tr><td>계절</td><td>가장 높은·낮은 달, 강우기형인지 갈수기형인지</td><td>같은 달끼리 평균. 강우기(6~9월) ÷ 갈수기(12~3월) ≥ 1.3 → 강우기 높음, ≤ 1/1.3 → 갈수기 높음</td></tr>
+    <tr><td>지점 구분</td><td>선택 지점에 하천수·산단하천·호소수·농업용수가 섞여 있으면 구분별 평균과 그 차이(몇 배)</td><td>지점별 기간 평균을 구분마다 평균</td></tr>
+    <tr><td>항목 관계</td><td>함께 오르내리는 다른 항목</td><td>Spearman |ρ| ≥ 0.5인 항목만 최대 3개</td></tr>
+    <tr><td>자료 품질</td><td>자동 점검 건수, 자료가 적어 뺀 지점</td><td>측정 개월이 min(12, 기간의 60%) 미만이면 해석 보류</td></tr>
+    <tr><td>읽는 법</td><td>자동 해석이라는 안내</td><td>항상 마지막에 붙음</td></tr>
+  </table>
+  <h3>8.2 해석을 아끼는 규칙</h3>
+  <div class="warn"><b>원칙</b> ① 기간이 <b>24개월 미만</b>이면 추세를 판단하지 않습니다("판단 보류"). 짧은 기간의 오르내림은 계절 변화와 구분할 수 없기 때문입니다. ② 측정 개월이 적은 지점은 해석에서 뺍니다. ③ 원인은 <b>'~ 가능성', '~ 영향으로 볼 수 있습니다'</b>처럼 가능성으로만 씁니다. ④ 상관은 원인을 증명하지 않는다고 함께 적습니다.</div>
+  <h3>8.3 원인 문구는 어디서 오나 — 항목별 일반 해석</h3>
+  <p>원인 문구는 일반적인 수질 지식을 정리한 표(<code>ITEM_NOTE</code>)에서 고릅니다. 특정 지점의 실제 원인을 확인한 것이 아닙니다.</p>
+  <table>
+    <tr><th>항목</th><th>증가할 때</th><th>강우기에 높을 때</th><th>갈수기에 높을 때</th></tr>
+    <tr><td>BOD</td><td>생활하수·축산 폐수처럼 분해가 쉬운 유기물 유입</td><td>강우 초기 비점오염 유출</td><td>유량이 줄어 방류수가 덜 희석</td></tr>
+    <tr><td>TOC</td><td>난분해성 유기물(산단·처리 방류수) 또는 조류 증가</td><td>토양 유기물·비점오염 유출</td><td>방류수 비중 증가</td></tr>
+    <tr><td>COD</td><td>유기물 부하 증가(TOC와 함께 확인)</td><td>유기물 유출</td><td>희석 감소</td></tr>
+    <tr><td>SS</td><td>토지 개발·공사, 하상 교란, 조류 증가</td><td>강우 유출로 토사 유입(가장 흔함)</td><td>조류 증식·점오염원</td></tr>
+    <tr><td>T-N</td><td>방류수·축산·비료 영향</td><td>농경지·축산 비점오염 유출</td><td>겨울철 낮은 수온·적은 유량으로 높아지는 일반적 형태</td></tr>
+    <tr><td>T-P</td><td>방류·축산 영향</td><td>토사에 붙은 인이 쓸려 들어옴</td><td>방류수 희석 감소</td></tr>
+    <tr><td>색도</td><td>염색·피혁 등 산업단지 배출</td><td>부식질·토사 유입</td><td>산단 방류수 비중 증가</td></tr>
+  </table>
+  <div class="tip"><b>보고서에 쓸 때</b> 자동 해석 문장은 초안으로 쓰고, 유량·강우·주변 오염원(하수처리장, 산단, 축산) 자료로 확인한 내용을 덧붙이세요.</div>
+  <h3>8.4 비슷한 경향 찾기의 원칙</h3>
+  <p>두 지점의 같은 달 값을 짝지어 Spearman ρ를 계산합니다(같은 달이 12개월 이상 겹치는 쌍만). <b>평균 연결 군집</b> 방식으로, 묶음끼리의 평균 ρ가 기준(기본 0.7) 이상이면 하나로 합칩니다. '계절 제거'를 고르면 지점마다 같은 달 평균을 빼고 비교하여, 모든 하천에 공통인 여름·겨울 변화 대신 <b>사건·장기 변화가 닮은 지점</b>을 찾습니다. ρ는 '모양이 비슷한가'이지 '값이 비슷한가'가 아닙니다.</p>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+  <h2><span class="no">9</span>자동 점검과 표시 기호</h2>
+  <table>
+    <tr><th style="width:18%">표시</th><th>뜻</th><th style="width:38%">기준(설정 탭에서 바꿀 수 있음)</th></tr>
+    <tr><td><b style="color:var(--red)">▲</b> / <b style="color:var(--blue)">▼</b></td><td>그 지점의 선택 기간 평균보다 크게 높음 / 낮음</td><td>평균 ± 1 × 표준편차 밖(약 68% 범위 밖). 퍼센트·전체로 바꿀 수 있음</td></tr>
+    <tr><td>⚡ 특이 경향</td><td>값이 갑자기 튄 지점(선을 굵게 강조)</td><td>로버스트 z ≥ 8 (지점 중앙값에서 벗어난 정도)</td></tr>
+    <tr><td>이상값 의심 <span class="k">8,828건</span></td><td>입력 오류나 특이 사건일 수 있는 값</td><td>로버스트 z ≥ 6 <b>이고</b> 지점 중앙값의 5배 이상(또는 1/5 이하). 측정 8개월 이상 지점만</td></tr>
+    <tr><td>전월 동일 <span class="k">291건</span></td><td>복사 입력 의심</td><td>전월과 4개 항목 이상 값이 똑같음</td></tr>
+    <tr><td>검토필요 <span class="k">196건</span></td><td>검사일이 측정연월과 2개월 이상 다름</td><td>값은 측정연월 기준으로 사용</td></tr>
+  </table>
+  <div class="formula">로버스트 z = 0.6745 × (값 − 중앙값) ÷ MAD &nbsp;&nbsp;(MAD = 중앙값에서 떨어진 거리들의 중앙값)</div>
+  <p>평균·표준편차 대신 중앙값·MAD를 쓰는 이유: 튀는 값이 기준 자체를 끌어올려 자기 자신을 숨기는 일을 막기 위해서입니다. <b>점검 표시는 확인할 곳을 알려 줄 뿐이며 값을 바꾸거나 빼지 않습니다.</b> 농어촌공사 저수지처럼 변동이 큰 지점에서 이상값 의심이 많이 나올 수 있습니다.</p>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+  <h2><span class="no">10</span>자료 갱신</h2>
+  <table>
+    <tr><th style="width:32%">하고 싶은 일</th><th>방법</th></tr>
+    <tr><td>최신 자료 받기 → 대시보드 다시 만들기</td><td><code>수질측정망_갱신_windows.bat</code> / <code>_mac.command</code> 더블클릭 (= 도구모음 6번). 올해·작년 + 빠진 연도 + 실패했던 연도만 다시 받습니다.</td></tr>
+    <tr><td>인증키 확인</td><td>도구모음 7번 (1건 요청해 연결 시험)</td></tr>
+    <tr><td>매달 자동으로</td><td>도구모음 8번 = 매달 15일 09:30 예약(Windows 작업 스케줄러 / Mac launchd). 해제는 9번</td></tr>
+    <tr><td>프로그램을 고친 뒤 다시 만들기</td><td><code>빌드_windows.bat</code> / <code>빌드_mac.command</code> (= 도구모음 2번)</td></tr>
+    <tr><td>외부에 보낼 파일</td><td>도구모음 3번 → <code>…_공유용.html</code> (V월드 키를 뺀 파일)</td></tr>
+  </table>
+  <div class="warn"><b>행정망</b> 행정망 PC는 공공데이터포털에 접속할 수 없습니다. <b>인터넷이 되는 PC에서 갱신</b>한 뒤 만들어진 HTML 파일만 옮기세요. 인터넷이 안 되면 갱신은 10초 안에 멈추고 기존 자료는 그대로 남습니다.</div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+  <h2><span class="no">11</span>꼭 알아 둘 점</h2>
+  <table>
+    <tr><th style="width:4%">#</th><th>내용</th></tr>
+    <tr><td>1</td><td>월 값은 <b>같은 달 여러 회차의 평균</b>입니다. 2016년 전후로 측정 횟수가 늘어난 지점이 많아, 오래된 자료와 비교할 때 주의합니다.</td></tr>
+    <tr><td>2</td><td>기관마다 재는 항목이 다릅니다(예: 색도는 일부 지점만). 그래프가 비면 다른 항목을 고르세요.</td></tr>
+    <tr><td>3</td><td>한국농어촌공사 지점(176개)은 대부분 <b>농업용수 저수지</b>입니다. 하천과 같은 기준으로 비교하지 않습니다.</td></tr>
+    <tr><td>4</td><td>등급 판정은 선택 기간 평균 기준이라 <b>공식 연간 수질 평가와 다를 수 있습니다.</b></td></tr>
+    <tr><td>5</td><td>자동 해석의 원인 설명은 <b>가능성</b>입니다. 보고서에는 현장·유량·오염원 자료로 확인 후 씁니다.</td></tr>
+    <tr><td>6</td><td>원자료 오류로 보이는 값도 대시보드는 고치지 않습니다. 확인이 필요하면 원자료 제공 기관에 문의합니다.</td></tr>
+    <tr><td>7</td><td><code>수질측정망/물환경.env</code>(인증키)는 외부에 보내지 않습니다.</td></tr>
+  </table>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+  <h2><span class="no">12</span>용어 풀이</h2>
+  <dl class="term">
+    <dt>수질측정망</dt><dd>환경부·국립환경과학원 주관으로 전국 하천·호소의 수질을 정기적으로 재는 지점망. 여러 기관이 나눠 조사합니다.</dd>
+    <dt>대권역·중권역</dt><dd>물이 모이는 지역 단위. 대권역 '한강' 안에 한탄강·경안천 같은 중권역이 있습니다. 왼쪽 목록의 '하천' 묶음 = 중권역입니다.</dd>
+    <dt>API</dt><dd>프로그램끼리 자료를 주고받는 창구. 여기서는 공공데이터포털에서 자료를 자동으로 받는 방법을 뜻합니다.</dd>
+    <dt>중앙값</dt><dd>값을 크기 순으로 세웠을 때 한가운데 값. 튀는 값의 영향을 덜 받습니다.</dd>
+    <dt>표준편차(σ)</dt><dd>값들이 평균에서 얼마나 퍼져 있는지 나타내는 수.</dd>
+    <dt>p값</dt><dd>"사실은 추세가 없는데 우연히 이런 결과가 나올 확률". 0.05보다 작으면 '뚜렷한 추세'로 봅니다.</dd>
+    <dt>Mann-Kendall</dt><dd>값의 순서만으로 증가·감소 추세를 검정하는 방법(분포 가정 없음).</dd>
+    <dt>Sen 기울기</dt><dd>모든 두 시점 기울기의 중앙값. 추세의 크기를 나타냅니다.</dd>
+    <dt>Spearman ρ</dt><dd>두 값의 크기 순서가 얼마나 같이 움직이는지(−1 ~ +1).</dd>
+    <dt>로버스트 z / MAD</dt><dd>중앙값과 MAD로 계산한 '평소에서 벗어난 정도'. 튀는 값 찾기에 씁니다.</dd>
+    <dt>강우기·갈수기</dt><dd>이 대시보드에서는 강우기 = 6~9월, 갈수기 = 12~3월로 정했습니다.</dd>
+    <dt>비점오염</dt><dd>도로·농경지처럼 넓은 곳에서 비와 함께 씻겨 들어오는 오염.</dd>
+  </dl>
+</section>
+<footer>한강권역 물환경 수질측정망 대시보드 v4.0 · 사용 설명서 · 자료: 공공데이터포털 국립환경과학원 물환경 수질측정망 운영결과(2026-11-18 받음)</footer>
+</main>
+</div>
+</body>
+</html>
