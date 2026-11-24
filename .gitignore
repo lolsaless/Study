@@ -1,0 +1,9 @@
+# 인증키·비밀값은 git 에 올리지 않음 (모든 하위 폴더에 적용)
+*.env
+.env
+api_keys.env
+!*.env.example
+
+# macOS·Python 부산물
+.DS_Store
+__pycache__/
