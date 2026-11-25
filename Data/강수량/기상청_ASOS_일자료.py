@@ -372,7 +372,7 @@ def merge_all() -> int:
     DATA_DIR.mkdir(exist_ok=True)
     df.to_csv(DATA_DIR / "기상청_ASOS_일자료.csv", index=False, encoding="utf-8-sig")
 
-    # 연구 분석 폴더 형식 (weather_data/weather_daily.csv 와 같은 열)
+    # 연구 분석 폴더 형식 (data_weather/weather_daily.csv 와 같은 열)
     num = lambda c: pd.to_numeric(df.get(c), errors="coerce")   # noqa: E731
     rn = num("RN_DAY")
     rain = rn.where(rn >= 0, 0.0 if RAIN_NEG_AS_ZERO else float("nan"))

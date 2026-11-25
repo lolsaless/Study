@@ -7,7 +7,7 @@
     raw_data/홍수통제소/waterlevel/<관측소코드>.csv  수위·유량 관측소별 일자료(받은 그대로, 이어 받기)
     raw_data/홍수통제소/rainfall/<관측소코드>.csv    우량 관측소별 일자료
     data/홍수통제소_수위유량_일자료.csv              결합: obscd, obs_name, date, wl_m, flow_cms, source
-                                                    (연구 분석 폴더 weather_data/flow_daily.csv 와 같은 열)
+                                                    (연구 분석 폴더 data_weather/flow_daily.csv 와 같은 열)
     data/홍수통제소_우량_일자료.csv                  결합: stn("HR"+코드), stn_name, date, rain_mm, source
                                                     (weather_daily.csv 의 강수 부분과 같은 열)
     data/홍수통제소_대상관측소.csv                   이번에 받은 관측소 목록(종류·이름·좌표·자료 기간)
