@@ -345,7 +345,7 @@ def init_total():
     readme = TOTAL / "README.md"
     if not readme.exists():
         readme.write_text("# total/ — 한탄강 연구 범위 원자료 모음\n\n`Study/Data/통합수집.py` 가 만들고 덧붙인다. "
-                          "손으로 고치지 않는다. 설명은 `Study/Data/통합수집_안내.md`.\n", encoding="utf-8")
+                          "손으로 고치지 않는다. 설명은 `Study/README.md` 2절.\n", encoding="utf-8")
     n = {}
     # 하천: 2024~25 확정 일자료(범위 4곳) + 2026 by_site 원자료
     daily = find(SRC_RIVER, "한강_일별.csv")
