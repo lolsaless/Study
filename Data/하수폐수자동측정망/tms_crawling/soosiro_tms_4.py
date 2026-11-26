@@ -117,6 +117,20 @@ SKIP_TEXTS = ("선택", "전체", "사업장 선택")
 
 REGION_NAME = "경기도"
 
+# 수집 범위(2026-11-26 추가). 통합 수집 코드(Data/통합수집.py)가 --site-keys 로 넘긴다.
+SITE_KEYS = []      # 사업장 이름에 이 말 중 하나가 들어간 곳만 조회. 빈 목록 = 전체(예전과 같음)
+EXCLUDE_KEYS = []   # 판단 전에 이름에서 지울 말(예: '남양주' → '양주'로 잘못 잡히지 않게)
+REFRESH = False     # True = 이미 받은 사업장도 다시 조회해 덮어씀(잠정치 p → 확정치 갱신)
+
+
+def in_scope(name: str) -> bool:
+    if not SITE_KEYS:
+        return True
+    n = unicodedata.normalize("NFC", str(name))
+    for k in EXCLUDE_KEYS:
+        n = n.replace(unicodedata.normalize("NFC", k), "")
+    return any(unicodedata.normalize("NFC", k) in n for k in SITE_KEYS)
+
 # 이 파일이 있는 폴더 기준으로 고정 (실행 위치와 무관)
 BASE_DIR = Path(__file__).resolve().parent
 OUT = BASE_DIR / "data"
@@ -1047,6 +1061,9 @@ def crawl_quarter(sess, year, quarter, limit=None, early_exit=10, recheck_empty=
     sl["closed"] = sl.site_name.str.contains("폐쇄")
     save_csv_atomic(sl, OUT / f"site_list_{tag}.csv")
     say(f"[{tag}] 사업장 {len(sites)}곳")
+    if SITE_KEYS:
+        sites = [(v, nm) for v, nm in sites if in_scope(nm)]
+        say(f"[{tag}] 수집 범위({', '.join(SITE_KEYS)}) 안 사업장 {len(sites)}곳만 조회")
 
     confirmed = load_confirmed()
     probe_empty = probe_hit = 0
@@ -1061,7 +1078,7 @@ def crawl_quarter(sess, year, quarter, limit=None, early_exit=10, recheck_empty=
             say("  [건너뜀] " + msg)
             break
 
-        if have_data(tag, name):
+        if have_data(tag, name) and not REFRESH:
             probe_hit += 1  # 이어받기
             continue
         if (tag, name) in confirmed and not recheck_empty:
@@ -1173,7 +1190,15 @@ def main():
     ap.add_argument("--with-images", action="store_true", help="이미지 로딩 허용 (기본: 차단해 속도 향상)")
     ap.add_argument("--level", type=int, default=0, choices=range(len(PROFILES)),
                     help="브라우저 모드 시작 단계 (0=헤드리스 eager, 1=헤드리스 none, 2=일반 창)")
+    ap.add_argument("--site-keys", nargs="*", default=[], metavar="말",
+                    help="사업장 이름에 이 말이 들어간 곳만 조회 (예: --site-keys 양주 동두천 포천 연천)")
+    ap.add_argument("--exclude-keys", nargs="*", default=[], metavar="말",
+                    help="판단 전에 이름에서 지울 말 (예: --exclude-keys 남양주)")
+    ap.add_argument("--refresh", action="store_true",
+                    help="이미 받은 사업장도 다시 조회해 덮어씀 (잠정치 → 확정치 갱신)")
     a = ap.parse_args()
+    global SITE_KEYS, EXCLUDE_KEYS, REFRESH
+    SITE_KEYS, EXCLUDE_KEYS, REFRESH = list(a.site_keys), list(a.exclude_keys), a.refresh
 
     if a.data_dir:
         set_data_dir(a.data_dir)
