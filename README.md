@@ -107,7 +107,7 @@
 
 ### 3-2. 하천 수질자동측정망 — `하천수질자동측정망/`
 - 2024~25: 내려받은 xlsx 시간자료를 `2024_2025/Code/merge_water_xlsx.py`·`merge_water_day.py` 로 일별 통합(`Data/데이터_설명.md`, `merge_report.txt`).
-- 2026: `2026/fetch_auto_water_quality.py` — `getRealTimeWaterQualityList`, 한강 S01001~S01025(23개소), 수온·pH·EC·DO·TOC·Chl-a·TN·TP·탁도. `raw_data/by_site/<코드>_<이름>_<YYYYMM>.csv`. 11-09 사용자 실행으로 2026-01~08 받음(API 가 일자료로 줌). `--end`, `--refresh`.
+- 2026: `2026/fetch_auto_water_quality.py` — `getRealTimeWaterQualityList`, 한강 S01001~S01025(23개소), 수온·pH·EC·DO·TOC·Chl-a·TN·TP·탁도. `raw_data/by_site/<코드>_<이름>_<YYYYMM>.csv`. 11-09 사용자 실행으로 2026-01~08 받음(API 가 일자료로 줌). `--end`, `--refresh`. **2026-11-27 수정**: API 가 요청 시작일(startDate …000000)의 자료를 주지 않아 매달 1일이 빠졌음(2026-01~09 모든 달·지점) → 하루 앞부터 요청하고 그 달로 다시 거름. 이미 받은 자료의 1일은 `python 통합수집.py --research-fill-gaps` 로 채움.
 - 결합: `수질자동측정망_결합.py` → `data/data_수질자동측정망.csv`.
 
 ### 3-3. 방류수 TMS 크롤러 — `하수폐수자동측정망/tms_crawling/soosiro_tms_4.py`

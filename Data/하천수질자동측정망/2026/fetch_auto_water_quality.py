@@ -164,9 +164,19 @@ def call_api(session: requests.Session, params: dict) -> tuple[list[dict], int]:
     raise ApiError(f"{MAX_RETRY}회 실패: {last}")
 
 
+def _msr_day(v) -> str:
+    """msrDate('2026-09-02', '20260902…' 등)를 'YYYYMMDD' 로. 못 읽으면 ''."""
+    digits = "".join(ch for ch in str(v or "") if ch.isdigit())
+    return digits[:8] if len(digits) >= 8 else ""
+
+
 def fetch_site_period(session, key, site_id, d0: date, d1: date) -> list[dict]:
+    """d0~d1 자료. 2026-11-27 수정: API 가 startDate(…000000) 와 같은 날 자료를 주지 않아
+    매달 1일이 빠졌다(2026-01~09 모든 달·지점 확인). 하루 앞(d0-1일)부터 요청하고
+    돌려받은 행을 d0~d1 로 다시 거른다(앞날 자료는 그 달 파일에 들어가지 않음)."""
     rows_all: list[dict] = []
     page = 1
+    q0 = d0 - timedelta(days=1)
     while True:
         params = {
             "serviceKey": key,
@@ -174,7 +184,7 @@ def fetch_site_period(session, key, site_id, d0: date, d1: date) -> list[dict]:
             "pageNo": page,
             "resultType": "xml",
             "siteId": site_id,
-            "startDate": d0.strftime("%Y%m%d") + "000000",
+            "startDate": q0.strftime("%Y%m%d") + "000000",
             "endDate": d1.strftime("%Y%m%d") + "235959",
         }
         rows, total = call_api(session, params)
@@ -183,7 +193,8 @@ def fetch_site_period(session, key, site_id, d0: date, d1: date) -> list[dict]:
             break
         page += 1
         time.sleep(SLEEP_SEC)
-    return rows_all
+    lo, hi = d0.strftime("%Y%m%d"), d1.strftime("%Y%m%d")
+    return [r for r in rows_all if lo <= _msr_day(r.get("msrDate")) <= hi]
 
 
 # ------------------------------------------------------------------
